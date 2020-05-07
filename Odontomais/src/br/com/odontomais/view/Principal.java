@@ -1,30 +1,34 @@
 package br.com.odontomais.view;
 
+import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Toolkit;
+import java.sql.Date;
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JLabel;
-import java.awt.Font;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.text.MaskFormatter;
 
+import br.com.odontomais.dao.PessoaDAO;
 import br.com.odontomais.model.Endereco;
 import br.com.odontomais.model.Funcionario;
 import br.com.odontomais.model.Paciente;
 import br.com.odontomais.model.Pessoa;
-
-import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
-import java.awt.Color;
-import javax.swing.JButton;
-import javax.swing.ImageIcon;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Principal extends JDialog {
 	
@@ -302,6 +306,11 @@ public class Principal extends JDialog {
 		paciente.add(txtPacienteMunicipio);
 		
 		btnPacienteSalvar = new JButton("");
+		btnPacienteSalvar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				salvarPaciente();
+			}
+		});
 		btnPacienteSalvar.setIcon(new ImageIcon("images/05.png"));
 		btnPacienteSalvar.setBounds(688, 343, 60, 60);
 		paciente.add(btnPacienteSalvar);
@@ -531,5 +540,26 @@ public class Principal extends JDialog {
 	
 	public void salvarPaciente() {
 		Pessoa p = new Pessoa();
+		p.setNome(txtPacienteNome.getText());
+		p.setCpf(txtPacienteCPF.getText());
+		p.setRg(txtPacienteRG.getText());
+		try {
+			DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+			p.setNascimento(new java.sql.Date(((java.util.Date)formatter.parse(txtPacienteNascimento.getText())).getTime()));
+		} catch (Exception event) {
+			event.printStackTrace();
+		}
+		if (cmbPacienteGenero.getSelectedIndex() == 0) p.setGenero("m");
+		if (cmbPacienteGenero.getSelectedIndex() == 1) p.setGenero("f");
+		p.setEmail(txtPacienteEmail.getText());
+		p.setTelefone(txtPacienteTelefone.getText());
+		p.setCelular(txtPacienteCelular.getText());
+		try {
+			PessoaDAO pessoaDAO = new PessoaDAO();
+			pessoaDAO.salvar(p);
+			JOptionPane.showMessageDialog(null, "Paciente cadastrado com sucesso!");
+		} catch (Exception e) {
+			
+		}
 	}
 }
