@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.text.MaskFormatter;
 
+import br.com.odontomais.dao.EnderecoDAO;
 import br.com.odontomais.dao.PessoaDAO;
 import br.com.odontomais.model.Endereco;
 import br.com.odontomais.model.Funcionario;
@@ -539,6 +540,7 @@ public class Principal extends JDialog {
 	}
 	
 	public void salvarPaciente() {
+		int codPessoa = 0;
 		Pessoa p = new Pessoa();
 		p.setNome(txtPacienteNome.getText());
 		p.setCpf(txtPacienteCPF.getText());
@@ -556,8 +558,21 @@ public class Principal extends JDialog {
 		p.setCelular(txtPacienteCelular.getText());
 		try {
 			PessoaDAO pessoaDAO = new PessoaDAO();
-			int codPessoa = pessoaDAO.salvar(p);
-			JOptionPane.showMessageDialog(null, "Código do paciente: " + codPessoa);
+			codPessoa = pessoaDAO.salvar(p);
+		} catch (Exception e) {
+			
+		}
+		Endereco endereco = new Endereco();
+		endereco.setEndereco(txtPacienteEndereco.getText());
+		endereco.setComplemento(txtPacienteComplemento.getText());
+		endereco.setUf((String) cmbPacienteUF.getSelectedItem());
+		endereco.setCep(txtPacienteCEP.getText());
+		endereco.setMunicipio(txtPacienteMunicipio.getText());
+		endereco.setCodPessoa(codPessoa);
+		try {
+			EnderecoDAO enderecoDAO = new EnderecoDAO();
+			enderecoDAO.salvar(endereco);
+			JOptionPane.showMessageDialog(null, "Paciente salvo com sucesso!");
 		} catch (Exception e) {
 			
 		}
