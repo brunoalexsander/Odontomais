@@ -556,8 +556,8 @@ public class Principal extends JDialog {
 		p.setCelular(txtPacienteCelular.getText());
 		try {
 			PessoaDAO pessoaDAO = new PessoaDAO();
-			pessoaDAO.salvar(p);
-			JOptionPane.showMessageDialog(null, "Paciente cadastrado com sucesso!");
+			int codPessoa = pessoaDAO.salvar(p);
+			JOptionPane.showMessageDialog(null, "Código do paciente: " + codPessoa);
 		} catch (Exception e) {
 			
 		}
