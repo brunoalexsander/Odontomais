@@ -46,7 +46,7 @@ public class Autenticador extends JFrame {
 	
 	public Autenticador() {
 		autenticador = new JFrame();
-		autenticador.setIconImage(Toolkit.getDefaultToolkit().getImage("images/favicon.png"));
+		autenticador.setIconImage(Toolkit.getDefaultToolkit().getImage("images/logo.png"));
 		autenticador.setResizable(false);
 		autenticador.setTitle("Odontomais");
 		autenticador.setSize(800, 500);

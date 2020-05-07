@@ -116,7 +116,7 @@ public class Principal extends JDialog {
 	
 	public Principal(Frame owner, boolean isModal, int permissao) throws ParseException {
 		super(owner, isModal);
-		this.setIconImage(Toolkit.getDefaultToolkit().getImage("images/favicon.png"));
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage("images/logo.png"));
 		this.setResizable(false);
 		this.setTitle("Odontomais");
 		this.setSize(800, 500);
