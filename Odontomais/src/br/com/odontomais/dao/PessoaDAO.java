@@ -31,7 +31,7 @@ public class PessoaDAO {
 			ps.setString(1, pessoa.getNome());
 			ps.setString(2, pessoa.getCpf());
 			ps.setString(3, pessoa.getRg());
-			ps.setDate(4, pessoa.getNascimento());
+			ps.setString(4, pessoa.getDataNascimento());
 			ps.setString(5, pessoa.getGenero());
 			ps.setString(6, pessoa.getEmail());
 			ps.setString(7, pessoa.getTelefone());

@@ -30,7 +30,7 @@ public class EnderecoDAO {
 			ps.setString(2, endereco.getComplemento());
 			ps.setString(3, endereco.getUf());
 			ps.setString(4, endereco.getCep());
-			ps.setString(5, endereco.getMunicipio());
+			ps.setString(5, endereco.getCidade());
 			ps.setInt(6, endereco.getCodPessoa());
 			ps.executeUpdate();
 		} catch (Exception e) {

@@ -562,7 +562,7 @@ public class Principal extends JDialog {
 		p.setRg(txtPacienteRG.getText());
 		try {
 			DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-			p.setNascimento(new java.sql.Date(((java.util.Date)formatter.parse(txtPacienteNascimento.getText())).getTime()));
+		//	p.setDataNascimento(new java.sql.Date(((java.util.Date)formatter.parse(txtPacienteNascimento.getText())).getTime()));
 		} catch (Exception event) {
 			event.printStackTrace();
 		}
@@ -582,7 +582,7 @@ public class Principal extends JDialog {
 		endereco.setComplemento(txtPacienteComplemento.getText());
 		endereco.setUf((String) cmbPacienteUF.getSelectedItem());
 		endereco.setCep(txtPacienteCEP.getText());
-		endereco.setMunicipio(txtPacienteMunicipio.getText());
+		//endereco.setMunicipio(txtPacienteMunicipio.getText());
 		endereco.setCodPessoa(codPessoa);
 		try {
 			EnderecoDAO enderecoDAO = new EnderecoDAO();

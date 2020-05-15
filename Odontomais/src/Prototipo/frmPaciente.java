@@ -23,48 +23,71 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.MaskFormatter;
+
+import br.com.odontomais.model.Paciente;
+
 import java.awt.Cursor;
 import javax.swing.ImageIcon;
+import javax.swing.JTextArea;
+import java.awt.event.ActionListener;
+import java.text.ParseException;
+import java.awt.event.ActionEvent;
 
 public class frmPaciente extends JFrame {
 
 	private JPanel contentPane;
-	public JTabbedPane tabbedPane;
-	public JPanel paciente;
-	public JPanel panel_1;
-	public JTextField textField;
-	public JFormattedTextField txtPacienteCPF;
-	public JFormattedTextField txtPacienteRG;
-	public JFormattedTextField txtPacienteNascimento;
-	public JComboBox cmbPacienteGenero;
-	public JTextField textField_1;
-	public JFormattedTextField txtPacienteCelular;
-	public JFormattedTextField txtPacienteTelefone;
-	public JSeparator separator;
-	public JPanel panel_2;
-	public JTextField textField_2;
-	public JTextField textField_3;
-	public JComboBox cmbPacienteUF;
-	public JFormattedTextField txtPacienteCEP;
-	public JTextField textField_4;
-	public JTextField textField_5;
-	public JPanel panel_3;
-	public JTextField textField_6;
-	public JFormattedTextField txtPacienteValidadeConvenio;
-	public JTextField textField_7;
-	public JComboBox cmbPacienteConvenio;
-	public JCheckBox chckbxNewCheckBox;
-	public JComboBox cmbPacienteConvenio_1;
-	public JButton btnNewButton;
-	public JTable table;
-	public JButton btnPacienteSalvar;
-	public JButton btnPacienteConsultar;
-	public JButton btnPacienteAlterar;
-	public JButton btnPacienteExcluir;
-	public JButton btnPacienteLimpar;
-	public JPanel panel;
-	public JPanel panel_4;
-	public JPanel panel_5;
+	protected JTabbedPane tabbedPane;
+	protected JPanel pnlPaciente;
+	protected JPanel panel_1;
+	protected JTextField txtNomePaciente;
+	protected JFormattedTextField txtCPFPaciente;
+	protected JFormattedTextField txtRGPaciente;
+	protected JFormattedTextField txtNascimentoPaciente;
+	protected JComboBox cmbGeneroPaciente;
+	protected JTextField txtEmailPaciente;
+	protected JFormattedTextField txtCelularPaciente;
+	protected JFormattedTextField txtTelefonePaciente;
+	protected JSeparator separator;
+	protected JPanel panel_2;
+	protected JTextField txtEnderecoPaciente;
+	protected JTextField txtComplementoPaciente;
+	protected JComboBox cmbUFPaciente;
+	protected JFormattedTextField txtCepPaciente;
+	protected JTextField txtCidadePaciente;
+	protected JPanel panel_3;
+	protected JTextField txtCartaoConvenioPaciente;
+	protected JFormattedTextField txtValidadeConvenioPaciente;
+	protected JTextField txtConvenioTitularPaciente;
+	protected JComboBox cmbConvenioPaciente;
+	protected JCheckBox chkConvenioPaciente;
+	protected JComboBox cmbTratamentos;
+	protected JButton btnNovoTratamentoPaciente;
+	protected JTable tbl;
+	protected JButton btnPacienteSalvar;
+	protected JButton btnPacienteConsultar;
+	protected JButton btnPacienteAlterar;
+	protected JButton btnPacienteExcluir;
+	protected JButton btnPacienteLimpar;
+	protected JPanel panel;
+	protected JPanel panel_4;
+	protected JPanel panel_5;
+	protected JPanel panel_6;
+	protected JPanel panel_7;
+	protected JTextField txtNomeMedico;
+	protected JFormattedTextField txtDataProntuario;
+	protected JTextField txtDescricaoProntuario;
+	protected JButton btnPacienteSalvar_1;
+	protected JPanel panel_8;
+	protected JTextArea txtHistoricoProntuario;
+	protected JButton btnPacienteSalvar_4;
+	protected JTextField txtBairroPaciente;
+	
+	public Paciente paciente;
+	private FerramentasFormulario ferramentas; 
+	public JButton btnSalvarPaciente;
+	public JTextField txtNumeroPaciente;
 
 	/**
 	 * Launch the application.
@@ -75,6 +98,7 @@ public class frmPaciente extends JFrame {
 				try {
 					frmPaciente frame = new frmPaciente();
 					frame.setVisible(true);
+					frame.setLocationRelativeTo(null);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -84,29 +108,30 @@ public class frmPaciente extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws ParseException 
 	 */
-	public frmPaciente() {
+	public frmPaciente() throws ParseException {
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1009, 622);
+		setBounds(100, 100, 1009, 653);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
 		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		tabbedPane.setBounds(11, 10, 980, 573);
+		tabbedPane.setBounds(11, 10, 980, 589);
 		contentPane.add(tabbedPane);
 		
-		paciente = new JPanel();
-		paciente.setLayout(null);
-		paciente.setBackground(new Color(245, 245, 245));
-		tabbedPane.addTab("Paciente", null, paciente, null);
+		pnlPaciente = new JPanel();
+		pnlPaciente.setLayout(null);
+		pnlPaciente.setBackground(new Color(245, 245, 245));
+		tabbedPane.addTab("Paciente", null, pnlPaciente, null);
 		
 		panel_4 = new JPanel();
 		panel_4.setBackground(new Color(255, 255, 255));
-		panel_4.setBounds(10, 14, 470, 517);
-		paciente.add(panel_4);
+		panel_4.setBounds(10, 14, 470, 531);
+		pnlPaciente.add(panel_4);
 		panel_4.setLayout(null);
 		
 		panel_1 = new JPanel();
@@ -116,178 +141,209 @@ public class frmPaciente extends JFrame {
 		panel_1.setBorder(new TitledBorder(new MatteBorder(1, 0, 0, 0, (Color) new Color(70, 130, 180)), "DADOS PESSOAIS", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(70, 130, 180)));
 		panel_1.setBackground(Color.WHITE);
 		
-		textField = new JTextField();
-		textField.setFont(new Font("Arial", Font.PLAIN, 13));
-		textField.setColumns(10);
-		textField.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "NOME", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		textField.setBounds(10, 21, 450, 40);
-		panel_1.add(textField);
+		txtNomePaciente = new JTextField();
+		txtNomePaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtNomePaciente.setColumns(10);
+		txtNomePaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "NOME", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtNomePaciente.setBounds(10, 21, 450, 40);
+		panel_1.add(txtNomePaciente);
 		
-		txtPacienteCPF = new JFormattedTextField((AbstractFormatter) null);
-		txtPacienteCPF.setText("");
-		txtPacienteCPF.setFont(new Font("Arial", Font.PLAIN, 13));
-		txtPacienteCPF.setColumns(10);
-		txtPacienteCPF.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "CPF", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		txtPacienteCPF.setBounds(10, 72, 220, 40);
-		panel_1.add(txtPacienteCPF);
+		txtCPFPaciente = new JFormattedTextField((AbstractFormatter) null);
+		txtCPFPaciente.setText("");
+		txtCPFPaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtCPFPaciente.setColumns(10);
+		txtCPFPaciente.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("###.###.###-##")));
+		txtCPFPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "CPF", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtCPFPaciente.setBounds(10, 72, 220, 40);
+		panel_1.add(txtCPFPaciente);
 		
-		txtPacienteRG = new JFormattedTextField((AbstractFormatter) null);
-		txtPacienteRG.setText("");
-		txtPacienteRG.setFont(new Font("Arial", Font.PLAIN, 13));
-		txtPacienteRG.setColumns(10);
-		txtPacienteRG.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "RG", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		txtPacienteRG.setBounds(240, 72, 220, 40);
-		panel_1.add(txtPacienteRG);
+		txtRGPaciente = new JFormattedTextField((AbstractFormatter) null);
+		txtRGPaciente.setText("");
+		txtRGPaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtRGPaciente.setColumns(10);
+		txtRGPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "RG", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtRGPaciente.setBounds(240, 72, 220, 40);
+		panel_1.add(txtRGPaciente);
 		
-		txtPacienteNascimento = new JFormattedTextField((AbstractFormatter) null);
-		txtPacienteNascimento.setText("");
-		txtPacienteNascimento.setFont(new Font("Arial", Font.PLAIN, 13));
-		txtPacienteNascimento.setColumns(10);
-		txtPacienteNascimento.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "DATA DE NASCIMENTO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		txtPacienteNascimento.setBounds(10, 123, 220, 40);
-		panel_1.add(txtPacienteNascimento);
+		txtNascimentoPaciente = new JFormattedTextField((AbstractFormatter) null);
+		txtNascimentoPaciente.setText("");
+		txtNascimentoPaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtNascimentoPaciente.setColumns(10);
+		txtNascimentoPaciente.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("##/##/####")));
+		txtNascimentoPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "DATA DE NASCIMENTO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtNascimentoPaciente.setBounds(10, 123, 220, 40);
+		panel_1.add(txtNascimentoPaciente);
 		
-		cmbPacienteGenero = new JComboBox();
-		cmbPacienteGenero.setForeground(Color.BLACK);
-		cmbPacienteGenero.setFont(new Font("Arial", Font.PLAIN, 13));
-		cmbPacienteGenero.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "G\u00CANERO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		cmbPacienteGenero.setBackground(Color.WHITE);
-		cmbPacienteGenero.setBounds(240, 122, 220, 40);
-		panel_1.add(cmbPacienteGenero);
+		cmbGeneroPaciente = new JComboBox();
+		cmbGeneroPaciente.setModel(new DefaultComboBoxModel(new String[] {"-Selecione", "Masculino", "Feminino"}));
+		cmbGeneroPaciente.setForeground(Color.BLACK);
+		cmbGeneroPaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		cmbGeneroPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "G\u00CANERO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		cmbGeneroPaciente.setBackground(Color.WHITE);
+		cmbGeneroPaciente.setBounds(240, 122, 220, 40);
+		panel_1.add(cmbGeneroPaciente);
 		
-		textField_1 = new JTextField();
-		textField_1.setFont(new Font("Arial", Font.PLAIN, 13));
-		textField_1.setColumns(10);
-		textField_1.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "E-MAIL", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		textField_1.setBounds(10, 188, 450, 40);
-		panel_1.add(textField_1);
+		txtEmailPaciente = new JTextField();
+		txtEmailPaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtEmailPaciente.setColumns(10);
+		txtEmailPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "E-MAIL", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtEmailPaciente.setBounds(10, 188, 450, 40);
+		panel_1.add(txtEmailPaciente);
 		
-		txtPacienteCelular = new JFormattedTextField((AbstractFormatter) null);
-		txtPacienteCelular.setText("");
-		txtPacienteCelular.setFont(new Font("Arial", Font.PLAIN, 13));
-		txtPacienteCelular.setColumns(10);
-		txtPacienteCelular.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "CELULAR", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		txtPacienteCelular.setBounds(10, 239, 220, 40);
-		panel_1.add(txtPacienteCelular);
+		txtCelularPaciente = new JFormattedTextField((AbstractFormatter) null);
+		txtCelularPaciente.setText("");
+		txtCelularPaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtCelularPaciente.setColumns(10);
+		txtCelularPaciente.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("(##) #####-####")));
+		txtCelularPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "CELULAR", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtCelularPaciente.setBounds(10, 239, 220, 40);
+		panel_1.add(txtCelularPaciente);
 		
-		txtPacienteTelefone = new JFormattedTextField((AbstractFormatter) null);
-		txtPacienteTelefone.setText("");
-		txtPacienteTelefone.setFont(new Font("Arial", Font.PLAIN, 13));
-		txtPacienteTelefone.setColumns(10);
-		txtPacienteTelefone.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "TELEFONE", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		txtPacienteTelefone.setBounds(240, 239, 220, 40);
-		panel_1.add(txtPacienteTelefone);
+		txtTelefonePaciente = new JFormattedTextField((AbstractFormatter) null);
+		txtTelefonePaciente.setText("");
+		txtTelefonePaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtTelefonePaciente.setColumns(10);
+		txtTelefonePaciente.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("(##) ####-####")));
+		txtTelefonePaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "TELEFONE", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtTelefonePaciente.setBounds(240, 239, 220, 40);
+		panel_1.add(txtTelefonePaciente);
 		
 		separator = new JSeparator();
 		separator.setBounds(10, 175, 450, 2);
 		panel_1.add(separator);
 		
 		panel_2 = new JPanel();
-		panel_2.setBounds(0, 301, 470, 216);
+		panel_2.setBounds(0, 301, 470, 230);
 		panel_4.add(panel_2);
 		panel_2.setLayout(null);
 		panel_2.setBorder(new TitledBorder(new MatteBorder(1, 0, 0, 0, (Color) new Color(70, 130, 180)), "ENDERE\u00C7O", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(70, 130, 180)));
 		panel_2.setBackground(Color.WHITE);
 		
-		textField_2 = new JTextField();
-		textField_2.setFont(new Font("Arial", Font.PLAIN, 13));
-		textField_2.setColumns(10);
-		textField_2.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "ENDERE\u00C7O", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		textField_2.setBounds(10, 72, 355, 40);
-		panel_2.add(textField_2);
+		txtEnderecoPaciente = new JTextField();
+		txtEnderecoPaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtEnderecoPaciente.setColumns(10);
+		txtEnderecoPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "ENDERE\u00C7O", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtEnderecoPaciente.setBounds(10, 72, 360, 40);
+		panel_2.add(txtEnderecoPaciente);
 		
-		textField_3 = new JTextField();
-		textField_3.setFont(new Font("Arial", Font.PLAIN, 13));
-		textField_3.setColumns(10);
-		textField_3.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "COMPLEMENTO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		textField_3.setBounds(10, 122, 450, 40);
-		panel_2.add(textField_3);
+		txtComplementoPaciente = new JTextField();
+		txtComplementoPaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtComplementoPaciente.setColumns(10);
+		txtComplementoPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "COMPLEMENTO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtComplementoPaciente.setBounds(240, 124, 220, 40);
+		panel_2.add(txtComplementoPaciente);
 		
-		cmbPacienteUF = new JComboBox();
-		cmbPacienteUF.setBackground(Color.WHITE);
-		cmbPacienteUF.setModel(new DefaultComboBoxModel(new String[] {"SP"}));
-		cmbPacienteUF.setFont(new Font("Arial", Font.PLAIN, 13));
-		cmbPacienteUF.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "ESTADO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		cmbPacienteUF.setBounds(280, 164, 180, 40);
-		panel_2.add(cmbPacienteUF);
+		cmbUFPaciente = new JComboBox();
+		cmbUFPaciente.setBackground(Color.WHITE);
+		cmbUFPaciente.setModel(new DefaultComboBoxModel(new String[] {"SP"}));
+		cmbUFPaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		cmbUFPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "ESTADO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		cmbUFPaciente.setBounds(280, 176, 180, 40);
+		panel_2.add(cmbUFPaciente);
 		
-		txtPacienteCEP = new JFormattedTextField((AbstractFormatter) null);
-		txtPacienteCEP.setText("");
-		txtPacienteCEP.setFont(new Font("Arial", Font.PLAIN, 13));
-		txtPacienteCEP.setColumns(10);
-		txtPacienteCEP.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "CEP", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		txtPacienteCEP.setBounds(10, 21, 220, 40);
-		panel_2.add(txtPacienteCEP);
+		txtCepPaciente = new JFormattedTextField((AbstractFormatter) null);
+		txtCepPaciente.setText("");
+		txtCepPaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtCepPaciente.setColumns(10);
+		txtCepPaciente.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("#####-###")));
+		txtCepPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "CEP", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtCepPaciente.setBounds(10, 21, 220, 40);
+		panel_2.add(txtCepPaciente);
 		
-		textField_4 = new JTextField();
-		textField_4.setFont(new Font("Arial", Font.PLAIN, 13));
-		textField_4.setColumns(10);
-		textField_4.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "CIDADE", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		textField_4.setBounds(10, 165, 260, 40);
-		panel_2.add(textField_4);
+		txtCidadePaciente = new JTextField();
+		txtCidadePaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtCidadePaciente.setColumns(10);
+		txtCidadePaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "CIDADE", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtCidadePaciente.setBounds(10, 177, 260, 40);
+		panel_2.add(txtCidadePaciente);
 		
-		textField_5 = new JTextField();
-		textField_5.setFont(new Font("Arial", Font.PLAIN, 13));
-		textField_5.setColumns(10);
-		textField_5.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "N\u00BA", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		textField_5.setBounds(375, 72, 85, 40);
-		panel_2.add(textField_5);
+		txtBairroPaciente = new JTextField();
+		txtBairroPaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtBairroPaciente.setColumns(10);
+		txtBairroPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "BAIRRO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtBairroPaciente.setBounds(10, 124, 220, 40);
+		panel_2.add(txtBairroPaciente);
+		
+		txtNumeroPaciente = new JTextField();
+		txtNumeroPaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtNumeroPaciente.setColumns(10);
+		txtNumeroPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "N\u00BA", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtNumeroPaciente.setBounds(380, 72, 80, 40);
+		panel_2.add(txtNumeroPaciente);
 		
 		panel_5 = new JPanel();
 		panel_5.setBackground(Color.WHITE);
-		panel_5.setBounds(490, 14, 470, 436);
-		paciente.add(panel_5);
+		panel_5.setBounds(490, 14, 470, 445);
+		pnlPaciente.add(panel_5);
 		panel_5.setLayout(null);
 		
 		panel_3 = new JPanel();
-		panel_3.setBounds(0, 34, 470, 177);
+		panel_3.setBounds(0, 35, 470, 177);
 		panel_5.add(panel_3);
 		panel_3.setLayout(null);
 		panel_3.setBorder(new TitledBorder(new MatteBorder(1, 0, 0, 0, (Color) new Color(70, 130, 180)), "PLANO ODONTOL\u00D3GICO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(70, 130, 180)));
 		panel_3.setBackground(Color.WHITE);
 		panel_3.setAlignmentX(0.0f);
 		
-		textField_6 = new JTextField();
-		textField_6.setEnabled(false);
-		textField_6.setFont(new Font("Arial", Font.PLAIN, 13));
-		textField_6.setColumns(10);
-		textField_6.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "N\u00BA CART\u00C3O", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		textField_6.setBounds(10, 75, 220, 40);
-		panel_3.add(textField_6);
+		txtCartaoConvenioPaciente = new JTextField();
+		txtCartaoConvenioPaciente.setEnabled(false);
+		txtCartaoConvenioPaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtCartaoConvenioPaciente.setColumns(10);
+		txtCartaoConvenioPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "N\u00BA CART\u00C3O", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtCartaoConvenioPaciente.setBounds(10, 75, 220, 40);
+		panel_3.add(txtCartaoConvenioPaciente);
 		
-		txtPacienteValidadeConvenio = new JFormattedTextField((AbstractFormatter) null);
-		txtPacienteValidadeConvenio.setEnabled(false);
-		txtPacienteValidadeConvenio.setText("");
-		txtPacienteValidadeConvenio.setFont(new Font("Arial", Font.PLAIN, 13));
-		txtPacienteValidadeConvenio.setColumns(10);
-		txtPacienteValidadeConvenio.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "VALIDADE", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		txtPacienteValidadeConvenio.setBounds(240, 75, 220, 40);
-		panel_3.add(txtPacienteValidadeConvenio);
+		txtValidadeConvenioPaciente = new JFormattedTextField((AbstractFormatter) null);
+		txtValidadeConvenioPaciente.setEnabled(false);
+		txtValidadeConvenioPaciente.setText("");
+		txtValidadeConvenioPaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtValidadeConvenioPaciente.setColumns(10);
+		txtValidadeConvenioPaciente.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("##/##/####")));
+		txtValidadeConvenioPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "VALIDADE", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtValidadeConvenioPaciente.setBounds(240, 75, 220, 40);
+		panel_3.add(txtValidadeConvenioPaciente);
 		
-		textField_7 = new JTextField();
-		textField_7.setEnabled(false);
-		textField_7.setFont(new Font("Arial", Font.PLAIN, 13));
-		textField_7.setColumns(10);
-		textField_7.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "TITULAR", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		textField_7.setBounds(10, 126, 450, 40);
-		panel_3.add(textField_7);
+		txtConvenioTitularPaciente = new JTextField();
+		txtConvenioTitularPaciente.setEnabled(false);
+		txtConvenioTitularPaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtConvenioTitularPaciente.setColumns(10);
+		txtConvenioTitularPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "TITULAR", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtConvenioTitularPaciente.setBounds(10, 126, 450, 40);
+		panel_3.add(txtConvenioTitularPaciente);
 		
-		cmbPacienteConvenio = new JComboBox();
-		cmbPacienteConvenio.setEnabled(false);
-		cmbPacienteConvenio.setModel(new DefaultComboBoxModel(new String[] {"- Selecione"}));
-		cmbPacienteConvenio.setFont(new Font("Arial", Font.PLAIN, 13));
-		cmbPacienteConvenio.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "CONV\u00CANIO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		cmbPacienteConvenio.setBackground(Color.WHITE);
-		cmbPacienteConvenio.setBounds(10, 24, 450, 40);
-		panel_3.add(cmbPacienteConvenio);
+		cmbConvenioPaciente = new JComboBox();
+		cmbConvenioPaciente.setEnabled(false);
+		cmbConvenioPaciente.setModel(new DefaultComboBoxModel(new String[] {"- Selecione"}));
+		cmbConvenioPaciente.setFont(new Font("Arial", Font.PLAIN, 13));
+		cmbConvenioPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "CONV\u00CANIO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		cmbConvenioPaciente.setBackground(Color.WHITE);
+		cmbConvenioPaciente.setBounds(10, 24, 450, 40);
+		panel_3.add(cmbConvenioPaciente);
 		
-		chckbxNewCheckBox = new JCheckBox("Possui Conv\u00EAnio?");
-		chckbxNewCheckBox.setBounds(10, 0, 123, 23);
-		panel_5.add(chckbxNewCheckBox);
-		chckbxNewCheckBox.setBorder(null);
-		chckbxNewCheckBox.setForeground(new Color(70, 130, 180));
-		chckbxNewCheckBox.setFont(new Font("Roboto", Font.BOLD, 12));
-		chckbxNewCheckBox.setBackground(Color.WHITE);
+		chkConvenioPaciente = new JCheckBox("Possui Conv\u00EAnio?");
+		chkConvenioPaciente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				ferramentas = new FerramentasFormulario();
+				
+				if(chkConvenioPaciente.isSelected()) {
+					
+					ferramentas.habilitaComponentes(txtConvenioTitularPaciente, txtCartaoConvenioPaciente, txtValidadeConvenioPaciente);
+					cmbConvenioPaciente.setEnabled(true);
+				}
+				else {
+
+					ferramentas.desabilitaComponentes(txtConvenioTitularPaciente, txtCartaoConvenioPaciente, txtValidadeConvenioPaciente);
+					cmbConvenioPaciente.setEnabled(false);
+				}
+			}
+		});
+		chkConvenioPaciente.setBounds(10, 0, 123, 23);
+		panel_5.add(chkConvenioPaciente);
+		chkConvenioPaciente.setBorder(null);
+		chkConvenioPaciente.setForeground(new Color(70, 130, 180));
+		chkConvenioPaciente.setFont(new Font("Roboto", Font.BOLD, 12));
+		chkConvenioPaciente.setBackground(Color.WHITE);
 		
 		panel = new JPanel();
 		panel.setBounds(0, 222, 464, 214);
@@ -296,86 +352,167 @@ public class frmPaciente extends JFrame {
 		panel.setBorder(new TitledBorder(new MatteBorder(1, 0, 0, 0, (Color) new Color(70, 130, 180)), "TRATAMENTOS", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(70, 130, 180)));
 		panel.setLayout(null);
 		
-		cmbPacienteConvenio_1 = new JComboBox();
-		cmbPacienteConvenio_1.setBounds(10, 16, 400, 40);
-		panel.add(cmbPacienteConvenio_1);
-		cmbPacienteConvenio_1.setModel(new DefaultComboBoxModel(new String[] {"- Selecione"}));
-		cmbPacienteConvenio_1.setFont(new Font("Arial", Font.PLAIN, 13));
-		cmbPacienteConvenio_1.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "TRATAMENTO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		cmbPacienteConvenio_1.setBackground(Color.WHITE);
+		cmbTratamentos = new JComboBox();
+		cmbTratamentos.setBounds(10, 16, 400, 40);
+		panel.add(cmbTratamentos);
+		cmbTratamentos.setModel(new DefaultComboBoxModel(new String[] {"- Selecione"}));
+		cmbTratamentos.setFont(new Font("Arial", Font.PLAIN, 13));
+		cmbTratamentos.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "TRATAMENTO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		cmbTratamentos.setBackground(Color.WHITE);
 		
-		btnNewButton = new JButton("");
-		btnNewButton.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/plus-01.png")));
-		btnNewButton.setBounds(425, 21, 35, 35);
-		panel.add(btnNewButton);
-		btnNewButton.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-		btnNewButton.setBorder(null);
-		btnNewButton.setBackground(new Color(255, 255, 255));
+		btnNovoTratamentoPaciente = new JButton("");
+		btnNovoTratamentoPaciente.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/plus-01.png")));
+		btnNovoTratamentoPaciente.setBounds(425, 21, 35, 35);
+		panel.add(btnNovoTratamentoPaciente);
+		btnNovoTratamentoPaciente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+		btnNovoTratamentoPaciente.setBorder(null);
+		btnNovoTratamentoPaciente.setBackground(new Color(255, 255, 255));
 		
-		table = new JTable();
-		table.setBounds(10, 67, 450, 140);
-		panel.add(table);
-		table.setBorder(new LineBorder(new Color(70, 130, 180)));
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-			},
-			new String[] {
-				"TRATAMENTO", "VALOR", "PARCELAS", "FORMA PAG", "M\u00C9DICO", "CONSULTAS"
-			}
-		) {
-			Class[] columnTypes = new Class[] {
-				String.class, Object.class, Object.class, Object.class, Object.class, Object.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
-		table.getColumnModel().getColumn(0).setPreferredWidth(90);
+		tbl = new JTable();
+		tbl.setBounds(10, 67, 450, 140);
+		panel.add(tbl);
+		tbl.setBorder(new LineBorder(new Color(70, 130, 180)));
 		
 		btnPacienteSalvar = new JButton("");
+		btnPacienteSalvar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			}
+		});
 		btnPacienteSalvar.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/save.png")));
 		btnPacienteSalvar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnPacienteSalvar.setBorder(null);
 		btnPacienteSalvar.setBackground(Color.WHITE);
-		btnPacienteSalvar.setBounds(612, 459, 60, 60);
-		paciente.add(btnPacienteSalvar);
+		btnPacienteSalvar.setBounds(612, 471, 60, 60);
 		
 		btnPacienteConsultar = new JButton("");
+		btnPacienteConsultar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				
+				
+			}
+		});
 		btnPacienteConsultar.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/search.png")));
 		btnPacienteConsultar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnPacienteConsultar.setBorder(null);
 		btnPacienteConsultar.setBackground(Color.WHITE);
-		btnPacienteConsultar.setBounds(684, 459, 60, 60);
-		paciente.add(btnPacienteConsultar);
+		btnPacienteConsultar.setBounds(684, 471, 60, 60);
+		pnlPaciente.add(btnPacienteConsultar);
 		
 		btnPacienteAlterar = new JButton("");
 		btnPacienteAlterar.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/editi-01.png")));
 		btnPacienteAlterar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnPacienteAlterar.setBorder(null);
 		btnPacienteAlterar.setBackground(Color.WHITE);
-		btnPacienteAlterar.setBounds(756, 459, 60, 60);
-		paciente.add(btnPacienteAlterar);
+		btnPacienteAlterar.setBounds(756, 471, 60, 60);
+		pnlPaciente.add(btnPacienteAlterar);
 		
 		btnPacienteExcluir = new JButton("");
 		btnPacienteExcluir.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/delete-01.png")));
 		btnPacienteExcluir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnPacienteExcluir.setBorder(null);
 		btnPacienteExcluir.setBackground(Color.WHITE);
-		btnPacienteExcluir.setBounds(828, 459, 60, 60);
-		paciente.add(btnPacienteExcluir);
+		btnPacienteExcluir.setBounds(828, 471, 60, 60);
+		pnlPaciente.add(btnPacienteExcluir);
 		
 		btnPacienteLimpar = new JButton("");
 		btnPacienteLimpar.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/cancel-01.png")));
 		btnPacienteLimpar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnPacienteLimpar.setBorder(null);
 		btnPacienteLimpar.setBackground(Color.WHITE);
-		btnPacienteLimpar.setBounds(900, 459, 60, 60);
-		paciente.add(btnPacienteLimpar);
+		btnPacienteLimpar.setBounds(900, 471, 60, 60);
+		pnlPaciente.add(btnPacienteLimpar);
+		
+		btnSalvarPaciente = new JButton("");
+		btnSalvarPaciente.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				paciente = new Paciente();
+				paciente.setNome(txtNomePaciente.getText());
+				paciente.setCpf(txtCPFPaciente.getText());
+				paciente.setRg(txtRGPaciente.getText());
+				paciente.setDataNascimento(txtNascimentoPaciente.getText());
+				paciente.setGenero(cmbGeneroPaciente);
+				paciente.setEmail(txtEmailPaciente.getText());
+				paciente.setCelular(txtCelularPaciente.getText());
+				paciente.setTelefone(txtTelefonePaciente.getText());
+				paciente.setCep(txtCepPaciente.getText());
+				paciente.setEndereco(txtEnderecoPaciente.getText());
+				paciente.setNumero(txtNumeroPaciente.getText());
+				paciente.setBairro(txtBairroPaciente.getText());
+				paciente.setComplemento(txtComplementoPaciente.getText());
+				paciente.setCidade(txtCidadePaciente.getText());
+				paciente.setUf(cmbUFPaciente.getSelectedItem().toString());
+				paciente.setConvenio(cmbConvenioPaciente.getSelectedItem().toString());
+				paciente.setCartaoConvenio(txtCartaoConvenioPaciente.getText());
+				paciente.setValidadeCartaoConvenio(txtValidadeConvenioPaciente.getText());
+				paciente.setTitular(txtConvenioTitularPaciente.getText());				
+				
+			}
+		});
+		btnSalvarPaciente.setBorder(null);
+		btnSalvarPaciente.setBackground(Color.WHITE);
+		btnSalvarPaciente.setBounds(612, 471, 60, 60);
+		pnlPaciente.add(btnSalvarPaciente);
+		
+		panel_6 = new JPanel();
+		tabbedPane.addTab("Prontu\u00E1rio", null, panel_6, null);
+		panel_6.setLayout(null);
+		
+		panel_7 = new JPanel();
+		panel_7.setLayout(null);
+		panel_7.setBorder(new TitledBorder(new MatteBorder(1, 0, 0, 0, (Color) new Color(70, 130, 180)), "ANOTA\u00C7\u00C3O", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(70, 130, 180)));
+		panel_7.setBackground(Color.WHITE);
+		panel_7.setBounds(10, 11, 468, 424);
+		panel_6.add(panel_7);
+		
+		txtNomeMedico = new JTextField();
+		txtNomeMedico.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtNomeMedico.setColumns(10);
+		txtNomeMedico.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "M\u00C9DICO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtNomeMedico.setBounds(10, 21, 450, 40);
+		panel_7.add(txtNomeMedico);
+		
+		txtDataProntuario = new JFormattedTextField((Object) null);
+		txtDataProntuario.setText("");
+		txtDataProntuario.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtDataProntuario.setColumns(10);
+		txtDataProntuario.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "DATA", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtDataProntuario.setBounds(10, 72, 220, 40);
+		panel_7.add(txtDataProntuario);
+		
+		txtDescricaoProntuario = new JTextField();
+		txtDescricaoProntuario.setBorder(new LineBorder(new Color(70, 130, 180)));
+		txtDescricaoProntuario.setBounds(10, 123, 448, 290);
+		panel_7.add(txtDescricaoProntuario);
+		txtDescricaoProntuario.setColumns(10);
+		
+		btnPacienteSalvar_1 = new JButton("");
+		btnPacienteSalvar_1.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/save.png")));
+		btnPacienteSalvar_1.setBorder(null);
+		btnPacienteSalvar_1.setBackground(Color.WHITE);
+		btnPacienteSalvar_1.setBounds(346, 447, 60, 60);
+		panel_6.add(btnPacienteSalvar_1);
+		
+		panel_8 = new JPanel();
+		panel_8.setLayout(null);
+		panel_8.setBorder(new TitledBorder(new MatteBorder(1, 0, 0, 0, (Color) new Color(70, 130, 180)), "HIST\u00D3RICO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(70, 130, 180)));
+		panel_8.setBackground(Color.WHITE);
+		panel_8.setBounds(490, 11, 468, 496);
+		panel_6.add(panel_8);
+		
+		txtHistoricoProntuario = new JTextArea();
+		txtHistoricoProntuario.setDisabledTextColor(new Color(70, 130, 180));
+		txtHistoricoProntuario.setEnabled(false);
+		txtHistoricoProntuario.setBounds(12, 21, 444, 463);
+		panel_8.add(txtHistoricoProntuario);
+		
+		btnPacienteSalvar_4 = new JButton("");
+		btnPacienteSalvar_4.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/cancel-01.png")));
+		btnPacienteSalvar_4.setBorder(null);
+		btnPacienteSalvar_4.setBackground(Color.WHITE);
+		btnPacienteSalvar_4.setBounds(418, 447, 60, 60);
+		panel_6.add(btnPacienteSalvar_4);
 	}
 }

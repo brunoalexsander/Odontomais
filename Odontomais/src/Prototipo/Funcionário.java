@@ -87,7 +87,7 @@ public class Funcionário extends JFrame {
 		panel_1.setLayout(null);
 		panel_1.setBorder(new TitledBorder(new MatteBorder(1, 0, 0, 0, (Color) new Color(70, 130, 180)), "DADOS PESSOAIS", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(70, 130, 180)));
 		panel_1.setBackground(Color.WHITE);
-		panel_1.setBounds(0, 0, 470, 290);
+		panel_1.setBounds(0, 59, 470, 290);
 		panel.add(panel_1);
 		
 		textField = new JTextField();
@@ -161,7 +161,7 @@ public class Funcionário extends JFrame {
 		panel_2.setLayout(null);
 		panel_2.setBorder(new TitledBorder(new MatteBorder(1, 0, 0, 0, (Color) new Color(70, 130, 180)), "ENDERE\u00C7O", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(70, 130, 180)));
 		panel_2.setBackground(Color.WHITE);
-		panel_2.setBounds(0, 290, 470, 216);
+		panel_2.setBounds(0, 350, 470, 216);
 		panel.add(panel_2);
 		
 		textField_2 = new JTextField();
@@ -209,13 +209,13 @@ public class Funcionário extends JFrame {
 		panel_2.add(textField_5);
 		
 		cmbPacienteGenero_1 = new JComboBox();
+		cmbPacienteGenero_1.setBounds(11, 11, 448, 40);
+		panel.add(cmbPacienteGenero_1);
 		cmbPacienteGenero_1.setModel(new DefaultComboBoxModel(new String[] {"- Selecione"}));
 		cmbPacienteGenero_1.setForeground(Color.BLACK);
 		cmbPacienteGenero_1.setFont(new Font("Arial", Font.PLAIN, 13));
 		cmbPacienteGenero_1.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "CARGO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
 		cmbPacienteGenero_1.setBackground(Color.WHITE);
-		cmbPacienteGenero_1.setBounds(10, 514, 448, 40);
-		panel.add(cmbPacienteGenero_1);
 		
 		btnPacienteLimpar = new JButton("");
 		btnPacienteLimpar.setIcon(new ImageIcon(Funcionário.class.getResource("/Prototipo/cancel-01.png")));
