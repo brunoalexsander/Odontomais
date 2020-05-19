@@ -1,37 +1,44 @@
 package br.com.odontomais.model;
 
+import javax.swing.JOptionPane;
+
+import br.com.odontomais.dao.PacienteDAO;
+import br.com.odontomais.dao.ResponsavelDAO;
+
 public class Paciente extends Pessoa{
-	
-	private int codPessoa;
+
+	private int codPaciente;
 	private String nomeConvenio;
 	private String cartaoConvenio;
 	private String validadeCartaoConvenio;
-	private String titular;
-	
+	private String titularConvenio;
+	private PacienteDAO DAOpaciente;
+	private ResponsavelDAO DAOResponsavel;
+
 	public Paciente() {
-		
+
 	}
-	
+
 	public Paciente(int codPessoa, String convenio, String cartaoConvenio, String titular) {
 		super();
 		this.nomeConvenio = convenio;
 		this.cartaoConvenio = cartaoConvenio;
-		this.titular = titular;
+		this.titularConvenio = titular;
 	}
 
-	public int getCodPessoa() {
-		return codPessoa;
+	public int getCodPaciente() {
+		return codPaciente;
 	}
 
-	public void setCodPessoa(int codPessoa) {
-		this.codPessoa = codPessoa;
+	public void setCodPaciente(int codPaciente) {
+		this.codPaciente = codPaciente;
 	}
 
-	public String getConvenio() {
+	public String getNomeConvenio() {
 		return nomeConvenio;
 	}
 
-	public void setConvenio(String convenio) {
+	public void setNomeConvenio(String convenio) {
 		this.nomeConvenio = convenio;
 	}
 
@@ -44,19 +51,53 @@ public class Paciente extends Pessoa{
 	}
 
 	public void setValidadeCartaoConvenio(String validadeCartaoConvenio) {
-		this.validadeCartaoConvenio = validadeCartaoConvenio;
+		this.validadeCartaoConvenio = validadeCartaoConvenio.replaceAll("/", "");
 	}
 
 	public void setCartaoConvenio(String cartaoConvenio) {
 		this.cartaoConvenio = cartaoConvenio;
 	}
 
-	public String getTitular() {
-		return titular;
+	public String getTitularConvenio() {
+		return titularConvenio;
 	}
 
-	public void setTitular(String titular) {
-		this.titular = titular;
+	public void setTitularConvenio(String titularConvenio) {
+		this.titularConvenio = titularConvenio;
+	}
+
+	/*SALVAR PACIENTE*/
+
+	public void salvarPaciente(Paciente paciente) {
+
+		try {
+
+			salvarPessoa(paciente);
+
+			DAOpaciente = new PacienteDAO();
+			DAOpaciente.salvarPaciente(paciente);
+
+			JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void consultarPaciente(Paciente paciente) {
+		
+		try {
+			
+			consultarPessoa(paciente);
+			
+			DAOpaciente = new PacienteDAO();
+			DAOpaciente.consultarPaciente(paciente);
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		
 	}
 
 }

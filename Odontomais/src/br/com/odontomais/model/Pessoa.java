@@ -87,10 +87,7 @@ public class Pessoa extends Endereco{
 		return this.dataNascimento;
 	}
 
-	public void setDataNascimento(String dataNascimento) {
-		
-		verificaMaiorIdade(dataNascimento);
-		
+	public void setDataNascimento(String dataNascimento) {			
 		this.dataNascimento = dataNascimento.replaceAll("[\\D]", "");
 	}
 
@@ -152,71 +149,79 @@ public class Pessoa extends Endereco{
 	}
 
 
-	private boolean verificaMaiorIdade(String dataNasc){
+	public static boolean verificaMaiorIdade(String dataNasc){
 
 		boolean maiorIdade = false;
-		
-		DateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
+
+		DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 		Date dataNascInput = null;
 
 		try {
 
-			dataNascInput= sdf.parse(dataNasc);
+			dataNascInput = sdf.parse(dataNasc);
 
 		} catch (Exception e) {}
 
-		Calendar dateOfBirth = new GregorianCalendar();
+		Calendar dateOfBirth = new GregorianCalendar(); //DATA DE ANIVERSÁRIO
+
+		Calendar dataAtual = new GregorianCalendar();
 
 		dateOfBirth.setTime(dataNascInput);
-
-		Calendar dataAtual = Calendar.getInstance();
 
 		int idade = dataAtual.get(Calendar.YEAR) - dateOfBirth.get(Calendar.YEAR);
 
 		dateOfBirth.add(Calendar.YEAR, idade);
 
-		//if (dataAtual.before(dateOfBirth)) {
-			
-		System.out.println(dateOfBirth.get(Calendar.MONTH));
-		
 		if (idade > 18) {
 			maiorIdade = true;
 		} else if(idade < 18) {
 			maiorIdade = false;
 		} else if (idade == 18) {
-			int mes =  dateOfBirth.get(Calendar.MONTH) - dataAtual.get(Calendar.MONTH);
+			
+			int mes =  (dateOfBirth.get(Calendar.MONTH)) - dataAtual.get(Calendar.MONTH);
+
 			if(mes > 0) {
 				maiorIdade = true;		
+			} else if(mes < 0) {
+				maiorIdade = false;
+			} else if(mes == 0) {
+				
+				int dia = dataAtual.get(Calendar.DAY_OF_MONTH) - dateOfBirth.get(Calendar.DAY_OF_MONTH);
+				
+				if(dia > 0 || dia == 0) {
+					maiorIdade = true;
+				}else {
+					maiorIdade = false;
+				}
 			}
 		}
 
 		return maiorIdade;
-
 	}
 
 	/*MÉTODOS DA CLASSE*/
 	/*------------------------------------*/
 
-	/*protected void salvarCadastro() throws Exception {
-
-		DAOendereco = new EnderecoDAO();
-		DAOendereco.salvarEndereco(frmAluno.aluno);
+	protected void salvarPessoa(Pessoa pessoa) throws Exception {
 
 		DAOpessoa = new PessoaDAO();
-		DAOpessoa.salvarPessoa(frmAluno.aluno);
-	}
-
-	protected void connsultarCadastro() throws Exception {
-
-		DAOpessoa = new PessoaDAO();
-		DAOpessoa.consultarPessoa(frmAluno.aluno.getCodPessoa());
+		DAOpessoa.salvarPessoa(pessoa);
 
 		DAOendereco = new EnderecoDAO();
-		DAOendereco.consultarEndereco(frmAluno.aluno.getCodEndereco());
+		DAOendereco.salvarEndereco(pessoa);
 	}
 
-	protected void alterarCadastro() throws Exception{
+	protected void consultarPessoa(Pessoa pessoa) throws Exception {
+
+		DAOpessoa = new PessoaDAO();
+		DAOpessoa.consultarPessoa(pessoa);
+
+		DAOendereco = new EnderecoDAO();
+		DAOendereco.consultarEndereco(pessoa);
+	}
+
+	/*protected void alterarCadastro() throws Exception{
 
 		DAOendereco = new EnderecoDAO();
 		DAOendereco.alterarEndereco(frmAluno.aluno);

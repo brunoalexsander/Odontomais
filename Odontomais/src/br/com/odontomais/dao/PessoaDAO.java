@@ -8,13 +8,13 @@ import java.sql.Statement;
 import br.com.odontomais.model.Pessoa;
 import br.com.odontomais.util.ConnectionFactory;
 
-public class PessoaDAO {
-	
+public class PessoaDAO extends EnderecoDAO{
+
 	private Pessoa pessoa;
 	private Connection conn;
 	private PreparedStatement ps;
 	private ResultSet rs;
-	
+
 	public PessoaDAO() throws Exception {
 		try {
 			conn = ConnectionFactory.getConnection();
@@ -22,11 +22,13 @@ public class PessoaDAO {
 			throw new Exception("Erro ao conectar ao DB"+ e.getMessage() );
 		}
 	}
-	
-	public int salvar(Pessoa pessoa) {
-		int codPessoa = 0;
+
+	public void salvarPessoa(Pessoa pessoa) {
+
 		try {
-			String sql = "INSERT INTO pessoa (nome, cpf, rg, nascimento, genero, email, telefone, celular) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+			String sql = "INSERT INTO pessoa (nome, cpf, rg, nascimento, genero, email, celular, telefone) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
 			ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, pessoa.getNome());
 			ps.setString(2, pessoa.getCpf());
@@ -34,18 +36,46 @@ public class PessoaDAO {
 			ps.setString(4, pessoa.getDataNascimento());
 			ps.setString(5, pessoa.getGenero());
 			ps.setString(6, pessoa.getEmail());
-			ps.setString(7, pessoa.getTelefone());
-			ps.setString(8, pessoa.getCelular());
+			ps.setString(7, pessoa.getCelular());
+			ps.setString(8, pessoa.getTelefone());
 			int row = ps.executeUpdate();
+
 			if (row == 1) {
 				rs = ps.getGeneratedKeys();
 				if(rs.next()) {
-					codPessoa = rs.getInt(1);
+					pessoa.setCodPessoa(rs.getInt(1));
 				}
 			}
+
+			ps.close();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return codPessoa;
+	}
+
+	/*CONSULTAR PESSOA*/
+
+	public void consultarPessoa(Pessoa pessoa) throws Exception {
+		try {
+			ps = conn.prepareStatement("SELECT * FROM pessoa WHERE cpf=? or codPessoa=?");
+			ps.setString(1, pessoa.getCpf());
+			ps.setInt(2, pessoa.getCodPessoa());
+			rs = ps.executeQuery(); 
+			if(rs.next()) {
+				pessoa.setCodPessoa(rs.getInt("codpessoa"));
+				pessoa.setNome(rs.getString("nome"));
+				pessoa.setRg(rs.getString("rg"));
+				pessoa.setDataNascimento(rs.getString("nascimento"));
+				pessoa.setGenero(rs.getString("genero"));
+				pessoa.setEmail(rs.getString("email"));
+				pessoa.setCelular(rs.getString("celular"));
+				pessoa.setTelefone(rs.getString("telefone"));
+				ps.close();
+			}
+		}
+		catch (Exception e) {
+			throw new Exception("Erro ao consultar" + e.getMessage());
+		}
 	}
 }

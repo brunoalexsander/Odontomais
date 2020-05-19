@@ -573,7 +573,7 @@ public class Principal extends JDialog {
 		p.setCelular(txtPacienteCelular.getText());
 		try {
 			PessoaDAO pessoaDAO = new PessoaDAO();
-			codPessoa = pessoaDAO.salvar(p);
+			//codPessoa = pessoaDAO.salvar(p);
 		} catch (Exception e) {
 			
 		}
@@ -586,7 +586,7 @@ public class Principal extends JDialog {
 		endereco.setCodPessoa(codPessoa);
 		try {
 			EnderecoDAO enderecoDAO = new EnderecoDAO();
-			enderecoDAO.salvar(endereco);
+		//	enderecoDAO.salvar(endereco);
 			JOptionPane.showMessageDialog(null, "Paciente salvo com sucesso!");
 		} catch (Exception e) {
 			
