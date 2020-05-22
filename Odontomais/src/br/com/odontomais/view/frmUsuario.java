@@ -29,6 +29,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JPasswordField;
 import javax.swing.JFormattedTextField;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class frmUsuario extends JFrame {
 
@@ -39,8 +41,8 @@ public class frmUsuario extends JFrame {
 	public JPasswordField txtSenhaUsuario;
 	public JComboBox cmbNivelAcesso;
 	public JScrollPane scrollPane;
-	public JButton btnSalvarPaciente_1;
-	public JButton btnSalvarPaciente_2;
+	public JButton btnDeletarUsuario;
+	public JButton btnEditarUsuario;
 	public JTable tblUsuario;
 	private Usuario usuario;
 	public JPanel panel;
@@ -67,7 +69,7 @@ public class frmUsuario extends JFrame {
 	 */
 	public frmUsuario() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 688, 280);
+		setBounds(100, 100, 357, 441);
 		contentPane = new JPanel();
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -127,46 +129,57 @@ public class frmUsuario extends JFrame {
 		btnSalvarPaciente.setIcon(new ImageIcon(frmUsuario.class.getResource("/br/com/odontomais/view/save.png")));
 		btnSalvarPaciente.setBorder(null);
 		btnSalvarPaciente.setBackground(Color.WHITE);
-		btnSalvarPaciente.setBounds(125, 167, 60, 60);
+		btnSalvarPaciente.setBounds(125, 330, 60, 60);
 		contentPane.add(btnSalvarPaciente);
 
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(341, 12, 315, 215);
+		scrollPane.setBounds(13, 167, 315, 151);
 		contentPane.add(scrollPane);
 
 		tblUsuario = new JTable();
-		tblUsuario.addKeyListener(new KeyAdapter() {
+		tblUsuario.addMouseListener(new MouseAdapter() {
 			int cont = 0;
 			@Override
-			public void keyPressed(KeyEvent arg0) {
-
+			public void mouseClicked(MouseEvent arg0) {
 				cont++;
 
 				if(cont == 2) {
-					
-					
 
-					cont = 0;
-				}
+					usuario = new Usuario();
+					int linha = tblUsuario.getSelectedRow();
 
+					if(tblUsuario.getSelectedRow() != -1) {	
 
-			}
+						usuario.setCodUsuario((Integer)tblUsuario.getValueAt(linha, 0));
+						int cod = usuario.getCodUsuario();
+						usuario = usuario.buscaUsuario(cod);
+
+						txtNomeUsuario.setText(usuario.getNomeUsuario());
+						txtLoginUsuario.setText(usuario.getLogin());
+						txtSenhaUsuario.setText(Integer.toString(usuario.getSenhaUsuario()));
+
+						cont = 0;
+
+					}
+
+				}}
 		});
 		tblUsuario.setModel(new DefaultTableModel(
 				new Object[][] {
+					{null, null, null, null},
 				},
 				new String[] {
-						"", "Nome", "Login", "Senha", "Tipo"
+						"", "Nome", "Login", "Tipo"
 				}
 				) {
 			Class[] columnTypes = new Class[] {
-					Integer.class, String.class, String.class, Integer.class, Integer.class
+					Integer.class, String.class, String.class, Integer.class
 			};
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
 			boolean[] columnEditables = new boolean[] {
-					false, false, false, false, false
+					false, false, false, false
 			};
 			public boolean isCellEditable(int row, int column) {
 				return columnEditables[column];
@@ -177,25 +190,24 @@ public class frmUsuario extends JFrame {
 		tblUsuario.getColumnModel().getColumn(1).setPreferredWidth(200);
 		tblUsuario.getColumnModel().getColumn(2).setPreferredWidth(50);
 		tblUsuario.getColumnModel().getColumn(3).setPreferredWidth(50);
-		tblUsuario.getColumnModel().getColumn(4).setPreferredWidth(50);
 		scrollPane.setViewportView(tblUsuario);
 
-		btnSalvarPaciente_1 = new JButton("");
-		btnSalvarPaciente_1.setBorder(null);
-		btnSalvarPaciente_1.setBackground(Color.WHITE);
-		btnSalvarPaciente_1.setBounds(269, 167, 60, 60);
-		contentPane.add(btnSalvarPaciente_1);
+		btnDeletarUsuario = new JButton("");
+		btnDeletarUsuario.setBorder(null);
+		btnDeletarUsuario.setBackground(Color.WHITE);
+		btnDeletarUsuario.setBounds(269, 330, 60, 60);
+		contentPane.add(btnDeletarUsuario);
 
-		btnSalvarPaciente_2 = new JButton("");
-		btnSalvarPaciente_2.addActionListener(new ActionListener() {
+		btnEditarUsuario = new JButton("");
+		btnEditarUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				usuario = new Usuario();
-				usuario.buscaUsuarios(tblUsuario);
+				usuario.alteraUsuario(usuario, tblUsuario);
 			}
 		});
-		btnSalvarPaciente_2.setBorder(null);
-		btnSalvarPaciente_2.setBackground(Color.WHITE);
-		btnSalvarPaciente_2.setBounds(197, 167, 60, 60);
-		contentPane.add(btnSalvarPaciente_2);
+		btnEditarUsuario.setBorder(null);
+		btnEditarUsuario.setBackground(Color.WHITE);
+		btnEditarUsuario.setBounds(197, 330, 60, 60);
+		contentPane.add(btnEditarUsuario);
 	}
 }

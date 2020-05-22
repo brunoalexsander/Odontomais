@@ -103,9 +103,6 @@ public class Endereco {
 		int index = 0;
 		
 		switch (this.uf) {
-		case "SP":
-			index = 0;
-			break;
 		case "AC":
 			index = 1;
 			break;
@@ -178,9 +175,9 @@ public class Endereco {
 		case "SC":
 			index = 24;
 			break;
-		/*case "SP":
+		case "SP":
 			index = 25;
-			break;*/
+			break;
 		case "SE":
 			index = 26;
 			break;

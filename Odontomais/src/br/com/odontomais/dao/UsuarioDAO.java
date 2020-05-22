@@ -52,7 +52,7 @@ public class UsuarioDAO {
 
 			while(rs.next()) {
 				Usuario usuario = new Usuario();
-				usuario.setCodUsusario(rs.getInt("codusuario"));
+				usuario.setCodUsuario(rs.getInt("codusuario"));
 				usuario.setNomeUsuario(rs.getString("nome"));
 				usuario.setLogin(rs.getString("login"));
 				usuario.setSenhaUsuario(rs.getInt("senha"));
@@ -79,7 +79,7 @@ public class UsuarioDAO {
 			rs = ps.executeQuery();
 
 			while(rs.next()) {
-				usuario.setCodUsusario(rs.getInt("codUsusario"));
+				usuario.setCodUsuario(rs.getInt("codUsuario"));
 				usuario.setNomeUsuario(rs.getString("nome"));
 				usuario.setLogin(rs.getString("login"));
 				usuario.setSenhaUsuario(rs.getInt("senha"));
@@ -89,5 +89,47 @@ public class UsuarioDAO {
 		catch (Exception e) {e.printStackTrace();}
 
 		return usuario;
+	}
+	
+	public Usuario buscaUsuario(Usuario usuario) {
+		
+		try {
+
+			ps = conn.prepareStatement("SELECT * FROM usuario WHERE login=? and senha=?");
+			ps.setString(1, usuario.getLogin());
+			ps.setInt(2, usuario.getSenhaUsuario());
+			rs = ps.executeQuery();
+
+			while(rs.next()) {
+				usuario.setCodUsuario(rs.getInt("codUsuario"));
+				usuario.setNomeUsuario(rs.getString("nome"));
+				usuario.setLogin(rs.getString("login"));
+				usuario.setSenhaUsuario(rs.getInt("senha"));
+				usuario.setNivelAcessoUsusario(rs.getInt("nivelacesso"));
+			}
+		}
+		catch (Exception e) {e.printStackTrace();}
+
+		return usuario;
+	}
+
+	public void editarUsuario(Usuario usuario){
+		
+		try {
+
+			String sql = "UPDATE usuario SET nome=?, login=?, senha=?, nivelacesso=? WHERE codUsuario=?";
+
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, usuario.getNomeUsuario());
+			ps.setString(2, usuario.getLogin());
+			ps.setInt(3, usuario.getSenhaUsuario());
+			ps.setInt(4, usuario.getNivelAcessoUsusario());
+			ps.setInt(5, usuario.getCodUsuario());
+			ps.executeUpdate();
+			ps.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }
