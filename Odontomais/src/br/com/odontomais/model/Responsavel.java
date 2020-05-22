@@ -36,11 +36,14 @@ public class Responsavel extends Pessoa{
 		
 	}
 	
-	public void consultarResponsavel(Pessoa responsavel, Paciente paciente) {
+	public void consultarResponsavel(Responsavel responsavel) {
 		
 		try {
+			
 			DAOResponsavel = new ResponsavelDAO();
-			DAOResponsavel.consultarResponsavel(paciente);
+			DAOResponsavel.consultarResponsavel(responsavel);
+			
+			consultarPessoa(responsavel);
 			
 		} catch (Exception e) {
 			// TODO: handle exception

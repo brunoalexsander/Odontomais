@@ -9,10 +9,19 @@ import br.com.odontomais.dao.TratamentoDAO;
 
 public class Tratamento {
 
+	private int codTratamentoPaciente;
 	private String nomeTratamento;
 	private double ValorTratamento;
 	private int NumeroConsultas;
 	private TratamentoDAO DAOtratamento;
+
+	public int getCodTratamentoPaciente() {
+		return codTratamentoPaciente;
+	}
+
+	public void setCodTratamentoPaciente(int codTratamentoPaciente) {
+		this.codTratamentoPaciente = codTratamentoPaciente;
+	}
 
 	public String getNomeTratamento() {
 		return nomeTratamento;

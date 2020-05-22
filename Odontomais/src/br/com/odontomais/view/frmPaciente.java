@@ -1,4 +1,4 @@
-package Prototipo;
+package br.com.odontomais.view;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -29,10 +29,14 @@ import javax.swing.text.MaskFormatter;
 
 import br.com.odontomais.model.Paciente;
 import br.com.odontomais.model.Pessoa;
+import br.com.odontomais.model.Prontuario;
 import br.com.odontomais.model.Responsavel;
 import br.com.odontomais.model.Tratamento;
+import br.com.odontomais.model.TratamentoPaciente;
 
 import java.awt.Cursor;
+import java.awt.Dimension;
+
 import javax.swing.ImageIcon;
 import javax.swing.JTextArea;
 import java.awt.event.ActionListener;
@@ -43,6 +47,14 @@ import java.awt.event.InputMethodListener;
 import java.awt.event.InputMethodEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import javax.swing.JScrollPane;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import javax.swing.ListSelectionModel;
+import javax.swing.JEditorPane;
+import java.awt.Rectangle;
+import java.awt.ComponentOrientation;
+import javax.swing.JTextPane;
 
 public class frmPaciente extends JFrame {
 
@@ -73,7 +85,6 @@ public class frmPaciente extends JFrame {
 	protected JCheckBox chkConvenioPaciente;
 	protected JComboBox cmbTratamentos;
 	protected JButton btnNovoTratamentoPaciente;
-	protected JTable tbl;
 	protected JButton btnPacienteSalvar;
 	protected JButton btnPacienteConsultar;
 	protected JButton btnPacienteAlterar;
@@ -84,13 +95,12 @@ public class frmPaciente extends JFrame {
 	protected JPanel panel_5;
 	protected JPanel panel_6;
 	protected JPanel panel_7;
-	protected JTextField txtNomeMedico;
+	protected JTextField txtNomeDentista;
 	protected JFormattedTextField txtDataProntuario;
-	protected JTextField txtDescricaoProntuario;
-	protected JButton btnPacienteSalvar_1;
+	protected JTextPane txtAnotacaoProntuario;
+	protected JButton btnSalvarProntuario;
 	protected JPanel panel_8;
-	protected JTextArea txtHistoricoProntuario;
-	protected JButton btnPacienteSalvar_4;
+	protected JButton btnCancelarProntuario;
 	protected JTextField txtBairroPaciente;
 	public JButton btnSalvarPaciente;
 	public JTextField txtNumeroPaciente;
@@ -110,11 +120,6 @@ public class frmPaciente extends JFrame {
 	public JFormattedTextField txtTelefoneResponsavel;
 	public JPanel panel_10;
 	public JButton btnSalvarResponsavel;
-
-	public static Paciente paciente;
-	public Responsavel responsavel;
-	private FerramentasFormulario ferramentas; 
-	private Tratamento tratamento;
 	public JPanel panel_9;
 	public JTextField txtEnderecoResponsavel;
 	public JTextField txtComplementoResponsavel;
@@ -124,6 +129,19 @@ public class frmPaciente extends JFrame {
 	public JTextField txtBairroResponsavel;
 	public JTextField txtNumeroResponsavel;
 	public JTextField txtCodPaciente;
+	public JScrollPane scrollPane;
+	public static JTable tblTratamentoPaciente;
+	public JScrollPane scrollPane_1;
+	public JTable tblAnotacoesProntuario;
+	public JButton btnAlterarProntuário;
+	public JScrollPane scrollPane_2;
+
+	public static Paciente paciente;
+	public Responsavel responsavel;
+	private FerramentasFormulario ferramentas; 
+	private Tratamento tratamento;
+	private TratamentoPaciente tratamentoPaciente;
+	private Prontuario prontuario;
 
 
 	/**
@@ -327,8 +345,9 @@ public class frmPaciente extends JFrame {
 		txtNumeroPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "N\u00BA", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
 		txtNumeroPaciente.setBounds(380, 72, 80, 40);
 		panel_2.add(txtNumeroPaciente);
-		
+
 		txtCodPaciente = new JTextField();
+		txtCodPaciente.setEnabled(false);
 		txtCodPaciente.setFont(new Font("Arial", Font.PLAIN, 13));
 		txtCodPaciente.setColumns(10);
 		txtCodPaciente.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "C\u00D3DIGO PACIENTE", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
@@ -435,17 +454,76 @@ public class frmPaciente extends JFrame {
 				frmTratamento.txtNomeTratamento.setText(cmbTratamentos.getSelectedItem().toString());
 			}
 		});
-		btnNovoTratamentoPaciente.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/plus-01.png")));
+		btnNovoTratamentoPaciente.setIcon(new ImageIcon(frmPaciente.class.getResource("/br/com/odontomais/view/plus-01.png")));
 		btnNovoTratamentoPaciente.setBounds(425, 21, 35, 35);
 		panel.add(btnNovoTratamentoPaciente);
 		btnNovoTratamentoPaciente.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnNovoTratamentoPaciente.setBorder(null);
 		btnNovoTratamentoPaciente.setBackground(new Color(255, 255, 255));
 
-		tbl = new JTable();
-		tbl.setBounds(10, 67, 450, 230);
-		panel.add(tbl);
-		tbl.setBorder(new LineBorder(new Color(70, 130, 180)));
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 57, 450, 240);
+		panel.add(scrollPane);
+
+		tblTratamentoPaciente = new JTable();
+		tblTratamentoPaciente.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tblTratamentoPaciente.setSurrendersFocusOnKeystroke(true);
+		tblTratamentoPaciente.addMouseListener(new MouseAdapter() {
+			int cont = 0;
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				cont++;
+				if(cont == 2) {
+
+					TratamentoPaciente tratamento;
+					int linha = tblTratamentoPaciente.getSelectedRow();
+
+					frmTratamento frame = new frmTratamento();
+					tratamento = frame.tratamentoPaciente = new TratamentoPaciente();
+
+					if(tblTratamentoPaciente.getSelectedRow() != -1) {	
+
+						tratamento.setCodTratamentoPaciente((Integer)tblTratamentoPaciente.getValueAt(linha, 0));
+						tratamento.setNomeTratamento((String)tblTratamentoPaciente.getValueAt(linha, 1));
+						tratamento.setNumeroConsultas((Integer)tblTratamentoPaciente.getValueAt(linha, 2));
+						tratamento.setHorasConsulta((Integer)tblTratamentoPaciente.getValueAt(linha, 3));
+						tratamento.setValorTratamento((Double)tblTratamentoPaciente.getValueAt(linha, 4));
+						tratamento.setFormaPagamento((String)tblTratamentoPaciente.getValueAt(linha, 5));
+						tratamento.setParcelas((Integer)tblTratamentoPaciente.getValueAt(linha, 6));
+
+						frame.txtNomeTratamento.setText(tratamento.getNomeTratamento());
+						frame.txtHorasConsulta.setValue(tratamento.getHorasConsulta());
+						frame.txtQtdConsultas.setValue(tratamento.getNumeroConsultas());
+						frame.txtValorTratamento.setText(Double.toString(tratamento.getValorTramento()));
+
+						cont = 0;
+					}
+
+					frame.setVisible(true);
+					frame.setLocationRelativeTo(null);
+				}
+			}
+		});
+		tblTratamentoPaciente.setModel(new DefaultTableModel(
+				new Object[][] {},
+				new String[] {
+						"Ref", "Tratamento", "Qtd/Consulta", "Hora/Consulta", "Valor", "Forma/Pagamento", "Parcelas"
+				}
+				) {
+			Class[] columnTypes = new Class[] {
+					Integer.class, String.class, Integer.class, Integer.class, Double.class, String.class, Integer.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+			boolean[] columnEditables = new boolean[] {
+					false, false, false, false, false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		scrollPane.setViewportView(tblTratamentoPaciente);
 
 		btnPacienteSalvar = new JButton("");
 		btnPacienteSalvar.addActionListener(new ActionListener() {
@@ -453,7 +531,7 @@ public class frmPaciente extends JFrame {
 
 			}
 		});
-		btnPacienteSalvar.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/save.png")));
+		btnPacienteSalvar.setIcon(new ImageIcon(frmPaciente.class.getResource("save.png")));
 		btnPacienteSalvar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnPacienteSalvar.setBorder(null);
 		btnPacienteSalvar.setBackground(Color.WHITE);
@@ -462,12 +540,12 @@ public class frmPaciente extends JFrame {
 		btnPacienteConsultar = new JButton("");
 		btnPacienteConsultar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+
+				/*PACIENTE*/
 				paciente = new Paciente();
 				paciente.setCpf(txtCPFPaciente.getText());
-				
 				paciente.consultarPaciente(paciente);
-				
+
 				txtCodPaciente.setText(Integer.toString((paciente.getCodPaciente())));
 				txtNomePaciente.setText(paciente.getNome());
 				txtRGPaciente.setText(paciente.getRg());
@@ -487,15 +565,38 @@ public class frmPaciente extends JFrame {
 				txtConvenioTitularPaciente.setText(paciente.getTitularConvenio());
 				txtCartaoConvenioPaciente.setText(paciente.getCartaoConvenio());
 				txtValidadeConvenioPaciente.setText(paciente.getValidadeCartaoConvenio());
-				
+
+				/*RESPONSÁVEL*/
 				responsavel = new Responsavel();
-				responsavel.consultarResponsavel(responsavel, paciente);
-				
-				txtNomeResponsavel.setText(responsavel.getNome());			
-				
+				responsavel.setCodPaciente(paciente.getCodPaciente());
+				responsavel.consultarResponsavel(responsavel);
+				txtNomeResponsavel.setText(responsavel.getNome());
+				txtCPFResponsavel.setText(responsavel.getCpf());
+				txtRGResponsavel.setText(responsavel.getRg());
+				txtNascimentoResponsavel.setText(responsavel.getDataNascimento());
+				cmbGeneroResponsavel.setSelectedIndex(responsavel.getGenero(cmbGeneroResponsavel));
+				txtEmailResponsavel.setText(responsavel.getEmail());
+				txtCelularResponsavel.setText(responsavel.getCelular());
+				txtTelefoneResponsavel.setText(responsavel.getTelefone());
+				txtCepResponsavel.setText(responsavel.getCep());
+				txtEnderecoResponsavel.setText(responsavel.getEndereco());
+				txtNumeroResponsavel.setText(responsavel.getNumero());
+				txtBairroResponsavel.setText(responsavel.getBairro());
+				txtComplementoResponsavel.setText(responsavel.getComplemento());
+				txtCidadeResponsavel.setText(responsavel.getCidade());
+				cmbUFResponsavel.setSelectedIndex(responsavel.getUF(cmbUFResponsavel));		
+
+				/*TRATAMENTOS*/
+				tratamentoPaciente = new TratamentoPaciente();
+				tratamentoPaciente.buscaTratamentosPaciente(paciente, tblTratamentoPaciente);
+
+				/*PRONTUARIO*/
+				prontuario = new Prontuario();
+				prontuario.buscarProntuarioPaciente(paciente, tblAnotacoesProntuario);
+
 			}
 		});
-		btnPacienteConsultar.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/search.png")));
+		btnPacienteConsultar.setIcon(new ImageIcon(frmPaciente.class.getResource("/br/com/odontomais/view/search.png")));
 		btnPacienteConsultar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnPacienteConsultar.setBorder(null);
 		btnPacienteConsultar.setBackground(Color.WHITE);
@@ -506,11 +607,47 @@ public class frmPaciente extends JFrame {
 		btnPacienteAlterar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
+				paciente.setNome(txtNomePaciente.getText());
+				paciente.setCpf(txtCPFPaciente.getText());
+				paciente.setRg(txtRGPaciente.getText());
+				paciente.setDataNascimento(txtNascimentoPaciente.getText());	
+				paciente.setGenero(cmbGeneroPaciente);
+				paciente.setEmail(txtEmailPaciente.getText());
+				paciente.setCelular(txtCelularPaciente.getText());
+				paciente.setTelefone(txtTelefonePaciente.getText());
+				paciente.setCep(txtCepPaciente.getText());
+				paciente.setEndereco(txtEnderecoPaciente.getText());
+				paciente.setNumero(txtNumeroPaciente.getText());
+				paciente.setBairro(txtBairroPaciente.getText());
+				paciente.setComplemento(txtComplementoPaciente.getText());
+				paciente.setCidade(txtCidadePaciente.getText());
+				paciente.setUf(cmbUFPaciente.getSelectedItem().toString());
+				paciente.setNomeConvenio(cmbConvenioPaciente.getSelectedItem().toString());
+				paciente.setCartaoConvenio(txtCartaoConvenioPaciente.getText());
+				paciente.setValidadeCartaoConvenio(txtValidadeConvenioPaciente.getText());
+				paciente.setTitularConvenio(txtConvenioTitularPaciente.getText());
 
+				responsavel.setNome(txtNomeResponsavel.getText());
+				responsavel.setCpf(txtCPFResponsavel.getText());
+				responsavel.setRg(txtRGResponsavel.getText());
+				responsavel.setDataNascimento(txtNascimentoResponsavel.getText());	
+				responsavel.setGenero(cmbGeneroResponsavel);
+				responsavel.setEmail(txtEmailResponsavel.getText());
+				responsavel.setCelular(txtCelularResponsavel.getText());
+				responsavel.setTelefone(txtTelefoneResponsavel.getText());
+				responsavel.setCep(txtCepResponsavel.getText());
+				responsavel.setEndereco(txtEnderecoResponsavel.getText());
+				responsavel.setNumero(txtNumeroResponsavel.getText());
+				responsavel.setBairro(txtBairroResponsavel.getText());
+				responsavel.setComplemento(txtComplementoResponsavel.getText());
+				responsavel.setCidade(txtCidadeResponsavel.getText());
+				responsavel.setUf(cmbUFResponsavel.getSelectedItem().toString());
+
+				paciente.alterarPaciente(paciente, responsavel);
 
 			}
 		});
-		btnPacienteAlterar.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/editi-01.png")));
+		btnPacienteAlterar.setIcon(new ImageIcon(frmPaciente.class.getResource("/br/com/odontomais/view/editi-01.png")));
 		btnPacienteAlterar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnPacienteAlterar.setBorder(null);
 		btnPacienteAlterar.setBackground(Color.WHITE);
@@ -518,7 +655,7 @@ public class frmPaciente extends JFrame {
 		pnlPaciente.add(btnPacienteAlterar);
 
 		btnPacienteExcluir = new JButton("");
-		btnPacienteExcluir.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/delete-01.png")));
+		btnPacienteExcluir.setIcon(new ImageIcon(frmPaciente.class.getResource("/br/com/odontomais/view/delete-01.png")));
 		btnPacienteExcluir.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnPacienteExcluir.setBorder(null);
 		btnPacienteExcluir.setBackground(Color.WHITE);
@@ -526,7 +663,7 @@ public class frmPaciente extends JFrame {
 		pnlPaciente.add(btnPacienteExcluir);
 
 		btnPacienteLimpar = new JButton("");
-		btnPacienteLimpar.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/cancel-01.png")));
+		btnPacienteLimpar.setIcon(new ImageIcon(frmPaciente.class.getResource("/br/com/odontomais/view/cancel-01.png")));
 		btnPacienteLimpar.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		btnPacienteLimpar.setBorder(null);
 		btnPacienteLimpar.setBackground(Color.WHITE);
@@ -534,7 +671,7 @@ public class frmPaciente extends JFrame {
 		pnlPaciente.add(btnPacienteLimpar);
 
 		btnSalvarPaciente = new JButton("");
-		btnSalvarPaciente.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/save.png")));
+		btnSalvarPaciente.setIcon(new ImageIcon(frmPaciente.class.getResource("/br/com/odontomais/view/save.png")));
 		btnSalvarPaciente.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
@@ -753,33 +890,50 @@ public class frmPaciente extends JFrame {
 		panel_7.setBounds(10, 11, 468, 424);
 		panel_6.add(panel_7);
 
-		txtNomeMedico = new JTextField();
-		txtNomeMedico.setFont(new Font("Arial", Font.PLAIN, 13));
-		txtNomeMedico.setColumns(10);
-		txtNomeMedico.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "M\u00C9DICO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-		txtNomeMedico.setBounds(10, 21, 450, 40);
-		panel_7.add(txtNomeMedico);
+		txtNomeDentista = new JTextField();
+		txtNomeDentista.setFont(new Font("Arial", Font.PLAIN, 13));
+		txtNomeDentista.setColumns(10);
+		txtNomeDentista.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "DENTISTA", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		txtNomeDentista.setBounds(10, 21, 450, 40);
+		panel_7.add(txtNomeDentista);
 
 		txtDataProntuario = new JFormattedTextField((Object) null);
 		txtDataProntuario.setText("");
 		txtDataProntuario.setFont(new Font("Arial", Font.PLAIN, 13));
 		txtDataProntuario.setColumns(10);
+		txtDataProntuario.setFormatterFactory(new DefaultFormatterFactory(new MaskFormatter("##/##/####")));
 		txtDataProntuario.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "DATA", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
 		txtDataProntuario.setBounds(10, 72, 220, 40);
 		panel_7.add(txtDataProntuario);
 
-		txtDescricaoProntuario = new JTextField();
-		txtDescricaoProntuario.setBorder(new LineBorder(new Color(70, 130, 180)));
-		txtDescricaoProntuario.setBounds(10, 123, 448, 290);
-		panel_7.add(txtDescricaoProntuario);
-		txtDescricaoProntuario.setColumns(10);
+		scrollPane_2 = new JScrollPane();
+		scrollPane_2.setBorder(null);
+		scrollPane_2.setBounds(12, 123, 448, 290);
+		panel_7.add(scrollPane_2);
 
-		btnPacienteSalvar_1 = new JButton("");
-		btnPacienteSalvar_1.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/save.png")));
-		btnPacienteSalvar_1.setBorder(null);
-		btnPacienteSalvar_1.setBackground(Color.WHITE);
-		btnPacienteSalvar_1.setBounds(346, 447, 60, 60);
-		panel_6.add(btnPacienteSalvar_1);
+		txtAnotacaoProntuario = new JTextPane();
+		scrollPane_2.setViewportView(txtAnotacaoProntuario);
+		txtAnotacaoProntuario.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		txtAnotacaoProntuario.setBorder(new LineBorder(new Color(70, 130, 180)));
+
+		btnSalvarProntuario = new JButton("");
+		btnSalvarProntuario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				prontuario = new Prontuario(paciente);
+				prontuario.setNomeMedico(txtNomeDentista.getText());
+				prontuario.setDataAnotacao(txtDataProntuario.getText());
+				prontuario.setAnotacao(txtAnotacaoProntuario.getText());
+				
+				prontuario.salvarAnotacaoProntuario(prontuario);
+				prontuario.buscarProntuarioPaciente(paciente, tblAnotacoesProntuario);
+			}
+		});
+		btnSalvarProntuario.setIcon(new ImageIcon(frmPaciente.class.getResource("/br/com/odontomais/view/save.png")));
+		btnSalvarProntuario.setBorder(null);
+		btnSalvarProntuario.setBackground(Color.WHITE);
+		btnSalvarProntuario.setBounds(274, 447, 60, 60);
+		panel_6.add(btnSalvarProntuario);
 
 		panel_8 = new JPanel();
 		panel_8.setLayout(null);
@@ -788,17 +942,90 @@ public class frmPaciente extends JFrame {
 		panel_8.setBounds(490, 11, 468, 496);
 		panel_6.add(panel_8);
 
-		txtHistoricoProntuario = new JTextArea();
-		txtHistoricoProntuario.setDisabledTextColor(new Color(70, 130, 180));
-		txtHistoricoProntuario.setEnabled(false);
-		txtHistoricoProntuario.setBounds(12, 21, 444, 463);
-		panel_8.add(txtHistoricoProntuario);
+		scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(12, 22, 444, 462);
+		panel_8.add(scrollPane_1);
 
-		btnPacienteSalvar_4 = new JButton("");
-		btnPacienteSalvar_4.setIcon(new ImageIcon(frmPaciente.class.getResource("/Prototipo/cancel-01.png")));
-		btnPacienteSalvar_4.setBorder(null);
-		btnPacienteSalvar_4.setBackground(Color.WHITE);
-		btnPacienteSalvar_4.setBounds(418, 447, 60, 60);
-		panel_6.add(btnPacienteSalvar_4);
+		tblAnotacoesProntuario = new JTable();
+		tblAnotacoesProntuario.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
+		tblAnotacoesProntuario.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		tblAnotacoesProntuario.addMouseListener(new MouseAdapter() {
+			int cont = 0;
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+			
+				cont++;
+				if(cont == 2) {
+
+					prontuario = new Prontuario();
+					int linha = tblAnotacoesProntuario.getSelectedRow();
+
+					if(tblAnotacoesProntuario.getSelectedRow() != -1) {	
+						
+						prontuario.setCodAnotacao((Integer)tblAnotacoesProntuario.getValueAt(linha, 1));
+						int cod = prontuario.getCodAnotacao();
+						prontuario = prontuario.buscarAnotacaoPaciente(cod);
+						
+						txtNomeDentista.setText(prontuario.getNomeMedico());
+						txtDataProntuario.setText(prontuario.getDataAnotacao().replaceAll("/", ""));
+						txtAnotacaoProntuario.setText(prontuario.getAnotacao());
+						
+						cont = 0;
+					}
+				}
+			}
+		});
+		tblAnotacoesProntuario.setRowMargin(0);
+		tblAnotacoesProntuario.setRowHeight(100);
+		tblAnotacoesProntuario.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"ANOTA\u00C7\u00D5ES", "REF"
+			}
+		) {
+			Class[] columnTypes = new Class[] {
+				Object.class, Integer.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+			boolean[] columnEditables = new boolean[] {
+				false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		tblAnotacoesProntuario.getColumnModel().getColumn(1).setPreferredWidth(30);
+		tblAnotacoesProntuario.getColumnModel().getColumn(1).setMinWidth(30);
+		tblAnotacoesProntuario.getColumnModel().getColumn(1).setMaxWidth(45);
+		scrollPane_1.setViewportView(tblAnotacoesProntuario);
+
+		btnCancelarProntuario = new JButton("");
+		btnCancelarProntuario.setIcon(new ImageIcon(frmPaciente.class.getResource("/br/com/odontomais/view/cancel-01.png")));
+		btnCancelarProntuario.setBorder(null);
+		btnCancelarProntuario.setBackground(Color.WHITE);
+		btnCancelarProntuario.setBounds(418, 447, 60, 60);
+		panel_6.add(btnCancelarProntuario);
+
+		btnAlterarProntuário = new JButton("");
+		btnAlterarProntuário.setIcon(new ImageIcon(frmPaciente.class.getResource("/br/com/odontomais/view/editi-01.png")));
+		btnAlterarProntuário.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				prontuario.setNomeMedico(txtNomeDentista.getText());
+				prontuario.setDataAnotacao(txtDataProntuario.getText());
+				prontuario.setAnotacao(txtAnotacaoProntuario.getText());
+				
+				prontuario.alterarAnotacao(prontuario);
+				prontuario.buscarProntuarioPaciente(paciente, tblAnotacoesProntuario);
+				
+			}
+		});
+		btnAlterarProntuário.setBorder(null);
+		btnAlterarProntuário.setBackground(Color.WHITE);
+		btnAlterarProntuário.setBounds(346, 447, 60, 60);
+		panel_6.add(btnAlterarProntuário);
 	}
 }

@@ -26,7 +26,7 @@ public class PacienteDAO extends PessoaDAO{
 
 		try {
 
-			String sql = "INSERT INTO paciente (nomeConvenio, valCartaoConvenio, titualarConvenio, codpessoa) VALUES (?, ?, ?, ?)";
+			String sql = "INSERT INTO paciente (nomeConvenio, valCartaoConvenio, titularConvenio, codpessoa) VALUES (?, ?, ?, ?)";
 
 			ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, paciente.getNomeConvenio());
@@ -58,6 +58,24 @@ public class PacienteDAO extends PessoaDAO{
 				paciente.setValidadeCartaoConvenio(rs.getString("valCartaoConvenio"));
 				paciente.setTitularConvenio(rs.getString("titularConvenio"));
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void alterarPaciente(Paciente paciente) {
+		
+		try {
+			String sql = "UPDATE paciente SET nomeConvenio=?, valCartaoConvenio=?, titularConvenio=? WHERE codpessoa=?";
+
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, paciente.getNomeConvenio());
+			ps.setString(2, paciente.getValidadeCartaoConvenio());
+			ps.setString(3, paciente.getTitularConvenio());
+			ps.setInt(4, paciente.getCodPessoa());
+			ps.executeUpdate();
+			ps.close();
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

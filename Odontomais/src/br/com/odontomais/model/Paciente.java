@@ -67,7 +67,6 @@ public class Paciente extends Pessoa{
 	}
 
 	/*SALVAR PACIENTE*/
-
 	public void salvarPaciente(Paciente paciente) {
 
 		try {
@@ -79,25 +78,41 @@ public class Paciente extends Pessoa{
 
 			JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
 
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-	
-	public void consultarPaciente(Paciente paciente) {
-		
-		try {
-			
-			consultarPessoa(paciente);
-			
-			DAOpaciente = new PacienteDAO();
-			DAOpaciente.consultarPaciente(paciente);
-			
-		} catch (Exception e) {
-			// TODO: handle exception
-		}
-		
+		} catch (Exception e) {}
 	}
 
+	/*CONSULTAR PACIENTE*/
+	public void consultarPaciente(Paciente paciente) {
+
+		try {
+			consultarPessoa(paciente);
+			DAOpaciente = new PacienteDAO();
+			DAOpaciente.consultarPaciente(paciente);
+
+		} catch (Exception e) {}
+	}
+
+	/*ALTERAR PACIENTE*/
+	public void alterarPaciente(Paciente paciente) {
+		try {
+			
+			DAOpaciente = new PacienteDAO();
+			DAOpaciente.alterarPaciente(paciente);
+			alterarPessoa(paciente);
+			
+			JOptionPane.showMessageDialog(null, "Alterado com Sucesso");
+		} catch (Exception e) {e.printStackTrace();}
+	}
+	
+	public void alterarPaciente(Paciente paciente, Responsavel responsavel) {
+		try {
+			
+			DAOpaciente = new PacienteDAO();
+			DAOpaciente.alterarPaciente(paciente);
+			alterarPessoa(paciente);
+			alterarPessoa(responsavel);
+			
+			JOptionPane.showMessageDialog(null, "Alterado com Sucesso");
+		} catch (Exception e) {e.printStackTrace();}
+	}
 }

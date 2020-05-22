@@ -55,7 +55,6 @@ public class PessoaDAO extends EnderecoDAO{
 	}
 
 	/*CONSULTAR PESSOA*/
-
 	public void consultarPessoa(Pessoa pessoa) throws Exception {
 		try {
 			ps = conn.prepareStatement("SELECT * FROM pessoa WHERE cpf=? or codPessoa=?");
@@ -65,6 +64,7 @@ public class PessoaDAO extends EnderecoDAO{
 			if(rs.next()) {
 				pessoa.setCodPessoa(rs.getInt("codpessoa"));
 				pessoa.setNome(rs.getString("nome"));
+				pessoa.setCpf(rs.getString("cpf"));
 				pessoa.setRg(rs.getString("rg"));
 				pessoa.setDataNascimento(rs.getString("nascimento"));
 				pessoa.setGenero(rs.getString("genero"));
@@ -76,6 +76,33 @@ public class PessoaDAO extends EnderecoDAO{
 		}
 		catch (Exception e) {
 			throw new Exception("Erro ao consultar" + e.getMessage());
+		}
+	}
+
+	/*ALTERAR PESSOA*/
+	public void alterarPessoa(Pessoa pessoa) {
+
+		try {
+
+			String sql = "UPDATE pessoa SET nome=?, cpf=?, rg=?, nascimento=?, genero=?, email=?, celular=?, telefone=? WHERE codPessoa=?";
+
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, pessoa.getNome());
+			ps.setString(2, pessoa.getCpf());
+			ps.setString(3, pessoa.getRg());
+			ps.setString(4, pessoa.getDataNascimento());
+			ps.setString(5, pessoa.getGenero());
+			ps.setString(6, pessoa.getEmail());
+			ps.setString(7, pessoa.getCelular());
+			ps.setString(8, pessoa.getTelefone());
+			ps.setInt(9, pessoa.getCodPessoa());
+			ps.executeUpdate();
+			ps.close();
+			
+			System.out.println(pessoa.getCodPessoa());
+
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

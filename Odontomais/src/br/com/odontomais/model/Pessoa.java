@@ -221,17 +221,17 @@ public class Pessoa extends Endereco{
 		DAOendereco.consultarEndereco(pessoa);
 	}
 
-	/*protected void alterarCadastro() throws Exception{
-
-		DAOendereco = new EnderecoDAO();
-		DAOendereco.alterarEndereco(frmAluno.aluno);
+	protected void alterarPessoa(Pessoa pessoa) throws Exception{
 
 		DAOpessoa = new PessoaDAO();
-		DAOpessoa.alterarPessoa(frmAluno.aluno);
+		DAOpessoa.alterarPessoa(pessoa);
+		
+		DAOendereco = new EnderecoDAO();
+		DAOendereco.alterarEndereco(pessoa);
 
 	}
 
-	protected void excluirCadastrato() throws Exception{
+	/*protected void excluirCadastrato() throws Exception{
 
 		DAOpessoa = new PessoaDAO();
 		DAOpessoa.excluirCadastro(frmAluno.aluno.getCodPessoa());

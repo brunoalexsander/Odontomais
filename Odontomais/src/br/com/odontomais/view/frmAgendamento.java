@@ -1,4 +1,4 @@
-package Prototipo;
+package br.com.odontomais.view;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -48,6 +48,7 @@ public class frmAgendamento extends JFrame {
 	public JPanel panel_1;
 	public JButton btnSalvarPaciente;
 	public JButton btnPacienteLimpar;
+	public JButton btnSalvarPaciente_1;
 
 	/**
 	 * Launch the application.
@@ -215,21 +216,28 @@ public class frmAgendamento extends JFrame {
 		textField_2.setBounds(5, 18, 400, 40);
 		panel_1.add(textField_2);
 		textField_2.setFont(new Font("Arial", Font.PLAIN, 13));
-		textField_2.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "M\u00C9DICO", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+		textField_2.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "DENTISTA", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
 		textField_2.setBackground(Color.WHITE);
 		
 		btnSalvarPaciente = new JButton("");
-		btnSalvarPaciente.setIcon(new ImageIcon(frmAgendamento.class.getResource("/Prototipo/save.png")));
+		btnSalvarPaciente.setIcon(new ImageIcon(frmAgendamento.class.getResource("/br/com/odontomais/view/editi-01.png")));
 		btnSalvarPaciente.setBorder(null);
 		btnSalvarPaciente.setBackground(Color.WHITE);
 		btnSalvarPaciente.setBounds(277, 405, 60, 60);
 		contentPane.add(btnSalvarPaciente);
 		
 		btnPacienteLimpar = new JButton("");
-		btnPacienteLimpar.setIcon(new ImageIcon(frmAgendamento.class.getResource("/Prototipo/cancel-01.png")));
+		btnPacienteLimpar.setIcon(new ImageIcon(frmAgendamento.class.getResource("/br/com/odontomais/view/cancel-01.png")));
 		btnPacienteLimpar.setBorder(null);
 		btnPacienteLimpar.setBackground(Color.WHITE);
 		btnPacienteLimpar.setBounds(349, 405, 60, 60);
 		contentPane.add(btnPacienteLimpar);
+		
+		btnSalvarPaciente_1 = new JButton("");
+		btnSalvarPaciente_1.setIcon(new ImageIcon(frmAgendamento.class.getResource("/br/com/odontomais/view/save.png")));
+		btnSalvarPaciente_1.setBorder(null);
+		btnSalvarPaciente_1.setBackground(Color.WHITE);
+		btnSalvarPaciente_1.setBounds(205, 405, 60, 60);
+		contentPane.add(btnSalvarPaciente_1);
 	}
 }

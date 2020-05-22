@@ -69,4 +69,28 @@ public class EnderecoDAO {
 		}
 	}
 
+	public void alterarEndereco(Pessoa pessoa) {
+
+		try {
+
+			String sql = "UPDATE endereco SET cep=?, endereco=?, numero=?, bairro=?, complemento=?, cidade=?, UF=? WHERE codPessoa=?";
+
+			ps = conn.prepareStatement(sql);
+			ps.setString(1, pessoa.getCep());
+			ps.setString(2, pessoa.getEndereco());
+			ps.setString(3, pessoa.getNumero());
+			ps.setString(4, pessoa.getBairro());
+			ps.setString(5, pessoa.getComplemento());
+			ps.setString(6, pessoa.getCidade());
+			ps.setString(7, pessoa.getUf());
+			ps.setInt(8, pessoa.getCodPessoa());
+			ps.executeUpdate();
+			ps.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+
 }

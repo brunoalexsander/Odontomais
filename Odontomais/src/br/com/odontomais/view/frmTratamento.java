@@ -1,4 +1,4 @@
-package Prototipo;
+package br.com.odontomais.view;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -10,6 +10,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JComboBox;
 import java.awt.Color;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 
 import br.com.odontomais.model.Tratamento;
 import br.com.odontomais.model.TratamentoPaciente;
@@ -50,7 +51,7 @@ public class frmTratamento extends JFrame {
 
 	public Tratamento tratamento;
 	public TratamentoPaciente tratamentoPaciente;
-	public JComboBox cmbHorasConsulta;
+	public JSpinner txtHorasConsulta;
 	public JPanel panel;
 	public JPanel panel_1;
 	public JSeparator separator;
@@ -75,6 +76,7 @@ public class frmTratamento extends JFrame {
 	 * Create the frame.
 	 */
 	public frmTratamento() {
+		setResizable(false);
 		setTitle("Adicionar Tratamento");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 363, 337);
@@ -107,13 +109,13 @@ public class frmTratamento extends JFrame {
 				txtQtdConsultas.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "QUANTIDADE", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
 				txtQtdConsultas.setBackground(Color.WHITE);
 				
-				cmbHorasConsulta = new JComboBox();
-				cmbHorasConsulta.setBounds(119, 70, 74, 40);
-				panel.add(cmbHorasConsulta);
-				cmbHorasConsulta.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4", "5", "6"}));
-				cmbHorasConsulta.setFont(new Font("Arial", Font.PLAIN, 13));
-				cmbHorasConsulta.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "HORAS", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
-				cmbHorasConsulta.setBackground(Color.WHITE);
+				txtHorasConsulta = new JSpinner();
+				txtHorasConsulta.setModel(new SpinnerNumberModel(new Integer(1), new Integer(1), null, new Integer(1)));
+				txtHorasConsulta.setBounds(119, 70, 74, 40);
+				panel.add(txtHorasConsulta);
+				txtHorasConsulta.setFont(new Font("Arial", Font.PLAIN, 13));
+				txtHorasConsulta.setBorder(new TitledBorder(new LineBorder(new Color(70, 130, 180)), "HORAS", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(30, 144, 255)));
+				txtHorasConsulta.setBackground(Color.WHITE);
 		
 		panel_1 = new JPanel();
 		panel_1.setBackground(new Color(255, 255, 255));
@@ -152,39 +154,58 @@ public class frmTratamento extends JFrame {
 				tratamentoPaciente = new TratamentoPaciente();
 				tratamentoPaciente.setNomeTratamento(txtNomeTratamento.getText());
 				tratamentoPaciente.setNumeroConsultas((Integer)txtQtdConsultas.getValue());
-				tratamentoPaciente.setHorasConsulta(Integer.parseInt(cmbHorasConsulta.getSelectedItem().toString()));
+				tratamentoPaciente.setHorasConsulta((Integer)txtHorasConsulta.getValue());
 				tratamentoPaciente.setFormaPagamento((String)cmbFormaPagamento.getSelectedItem());
 				tratamentoPaciente.setParcelas(Integer.parseInt(cmbParcelas.getSelectedItem().toString()));
 				
 				if(tratamentoPaciente.setValorTratamento(txtValorTratamento.getText()) == true) {
-					tratamentoPaciente.adicionarTratamento(tratamentoPaciente, frmPaciente.paciente);
+					tratamentoPaciente.adicionarTratamentoPaciente(tratamentoPaciente, frmPaciente.paciente);
 				} else {
 					JOptionPane.showMessageDialog(null, "Valor inválido");
 				}
 			}
 		});
-		btnAdicionarTratamento.setIcon(new ImageIcon(frmTratamento.class.getResource("/Prototipo/plus-02.png")));
+		btnAdicionarTratamento.setIcon(new ImageIcon(frmTratamento.class.getResource("/br/com/odontomais/view/plus-02.png")));
 		btnAdicionarTratamento.setBorder(null);
 		btnAdicionarTratamento.setBackground(new Color(255, 255, 255));
 		btnAdicionarTratamento.setBounds(119, 241, 45, 45);
 		contentPane.add(btnAdicionarTratamento);
 
 		btnPacienteConsultar = new JButton("");
-		btnPacienteConsultar.setIcon(new ImageIcon(frmTratamento.class.getResource("/Prototipo/editi-02.png")));
+		btnPacienteConsultar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				tratamentoPaciente.setNomeTratamento(txtNomeTratamento.getText());
+				tratamentoPaciente.setNumeroConsultas((Integer)txtQtdConsultas.getValue());
+				tratamentoPaciente.setHorasConsulta((Integer)txtHorasConsulta.getValue());
+				tratamentoPaciente.setFormaPagamento((String)cmbFormaPagamento.getSelectedItem());
+				tratamentoPaciente.setParcelas(Integer.parseInt(cmbParcelas.getSelectedItem().toString()));
+				
+				if(tratamentoPaciente.setValorTratamento(txtValorTratamento.getText()) == true) {
+					tratamentoPaciente.adicionarTratamentoPaciente(tratamentoPaciente, frmPaciente.paciente);
+				} else {
+					JOptionPane.showMessageDialog(null, "Valor inválido");
+				}
+				
+				tratamentoPaciente.alteraTratamentoPaciente(tratamentoPaciente);
+			}
+			
+		});
+		btnPacienteConsultar.setIcon(new ImageIcon(frmTratamento.class.getResource("/br/com/odontomais/view/search.png")));
 		btnPacienteConsultar.setBorder(null);
 		btnPacienteConsultar.setBackground(new Color(255, 255, 255));
 		btnPacienteConsultar.setBounds(176, 241, 45, 45);
 		contentPane.add(btnPacienteConsultar);
 
 		btnPacienteAlterar = new JButton("");
-		btnPacienteAlterar.setIcon(new ImageIcon(frmTratamento.class.getResource("/Prototipo/delete-02.png")));
+		btnPacienteAlterar.setIcon(new ImageIcon(frmTratamento.class.getResource("/br/com/odontomais/view/editi-01.png")));
 		btnPacienteAlterar.setBorder(null);
 		btnPacienteAlterar.setBackground(new Color(255, 255, 255));
 		btnPacienteAlterar.setBounds(233, 241, 45, 45);
 		contentPane.add(btnPacienteAlterar);
 
 		btnPacienteExcluir = new JButton("");
-		btnPacienteExcluir.setIcon(new ImageIcon(frmTratamento.class.getResource("/Prototipo/cancel-02.png")));
+		btnPacienteExcluir.setIcon(new ImageIcon(frmTratamento.class.getResource("/br/com/odontomais/view/cancel-01.png")));
 		btnPacienteExcluir.setBorder(null);
 		btnPacienteExcluir.setBackground(new Color(255, 255, 255));
 		btnPacienteExcluir.setBounds(290, 241, 45, 45);

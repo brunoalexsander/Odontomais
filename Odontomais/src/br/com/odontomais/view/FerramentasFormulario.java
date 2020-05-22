@@ -1,4 +1,4 @@
-package Prototipo;
+package br.com.odontomais.view;
 
 import java.awt.Color;
 

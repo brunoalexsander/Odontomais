@@ -40,6 +40,25 @@ public class TratamentoDAO {
 			e.printStackTrace();
 		}
 	}
+	
+	public String nomeTratamento(int codTramento) {
+		
+		String nomeTratamento = null;
+		
+		try {
+			ps = conn.prepareStatement("SELECT nomeTratamento FROM tratamento WHERE codTratamento=?");
+			ps.setInt(1, codTramento);
+			rs = ps.executeQuery();
+			
+			if(rs.next()) {
+				nomeTratamento = rs.getString("nomeTratamento");
+			}
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+		return nomeTratamento;
+	}
 
 	public List getTratamentos() throws Exception{
 

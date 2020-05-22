@@ -7,6 +7,7 @@ import java.sql.Statement;
 
 import br.com.odontomais.model.Paciente;
 import br.com.odontomais.model.Pessoa;
+import br.com.odontomais.model.Responsavel;
 import br.com.odontomais.util.ConnectionFactory;
 
 public class ResponsavelDAO {
@@ -41,22 +42,20 @@ public class ResponsavelDAO {
 		}
 	}
 
-	public Pessoa consultarResponsavel(Paciente paciente) {
-		
-		int codpessoa = -1;
-		
+	public Pessoa consultarResponsavel(Responsavel responsavel) {
+			
 		try {
-			ps = conn.prepareStatement("SELECT * FROM responsavel WHERE codPaciente=?");
-			ps.setInt(1, paciente.getCodPaciente());
+			ps = conn.prepareStatement("SELECT codPessoa FROM responsavelpaciente WHERE codPaciente=?");
+			ps.setInt(1, responsavel.getCodPaciente());
 			rs = ps.executeQuery(); 
 			if(rs.next()) {
-				codpessoa = rs.getInt("codPessoa");
+				responsavel.setCodPessoa(rs.getInt("codPessoa"));
 			}
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
 		
 		return pessoa;
-
 	}
+
 }
