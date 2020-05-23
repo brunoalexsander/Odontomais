@@ -1,5 +1,6 @@
 package br.com.odontomais.model;
 
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 import br.com.odontomais.dao.PacienteDAO;
@@ -36,6 +37,19 @@ public class Paciente extends Pessoa{
 
 	public String getNomeConvenio() {
 		return nomeConvenio;
+	}
+	
+	public int getNomeConvenio(JComboBox combo) {
+		
+		int index = 0;
+		
+		if(nomeConvenio.equals("Porto Seguro")) {
+			index = 1;
+		}else {
+			index = 2;
+		}
+		
+		return index;
 	}
 
 	public void setNomeConvenio(String convenio) {
@@ -88,6 +102,10 @@ public class Paciente extends Pessoa{
 			consultarPessoa(paciente);
 			DAOpaciente = new PacienteDAO();
 			DAOpaciente.consultarPaciente(paciente);
+			
+			if(paciente.getNome() == null) {
+				paciente.setCpf(null);
+			}
 
 		} catch (Exception e) {}
 	}
@@ -101,7 +119,7 @@ public class Paciente extends Pessoa{
 			alterarPessoa(paciente);
 			
 			JOptionPane.showMessageDialog(null, "Alterado com Sucesso");
-		} catch (Exception e) {e.printStackTrace();}
+		} catch (Exception e) {}
 	}
 	
 	public void alterarPaciente(Paciente paciente, Responsavel responsavel) {
@@ -113,6 +131,17 @@ public class Paciente extends Pessoa{
 			alterarPessoa(responsavel);
 			
 			JOptionPane.showMessageDialog(null, "Alterado com Sucesso");
+			
+		} catch (Exception e) {}
+	}
+	
+	public void excluirPaciente(Paciente paciente) {
+		try {
+			DAOpaciente = new PacienteDAO();
+			DAOpaciente.excluirPaciente(paciente);
+			
+			JOptionPane.showMessageDialog(null, "Excluido com Sucesso");
+			
 		} catch (Exception e) {e.printStackTrace();}
 	}
 }

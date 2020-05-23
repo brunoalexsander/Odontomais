@@ -6,9 +6,11 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
+import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.table.DefaultTableModel;
 
 public class FerramentasFormulario {
 
@@ -82,7 +84,7 @@ public class FerramentasFormulario {
 	public boolean validaCombo(JComboBox... comp) {
 
 		boolean validador = false;
-		
+
 		for(JComboBox args : comp) {
 
 			if (args.getSelectedIndex() == 0) {
@@ -95,7 +97,13 @@ public class FerramentasFormulario {
 		}
 		return validador;
 	}
-	
+
+	public void limpaTabela(JTable comp) {
+
+			DefaultTableModel model = (DefaultTableModel) comp.getModel();
+			model.setRowCount(0);
+		}
+
 	public boolean validaText(JTextField... comp) {
 
 		boolean validador = false;

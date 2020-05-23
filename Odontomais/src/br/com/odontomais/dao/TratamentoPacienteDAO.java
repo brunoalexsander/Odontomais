@@ -96,9 +96,18 @@ public class TratamentoPacienteDAO {
 			ps.executeUpdate();
 			ps.close();
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		} catch (Exception e) {}
+	}
+	
+	public void excluirTratamento(Paciente paciente, TratamentoPaciente tratamento) {
+		try {
+			String sql = "DELETE FROM tratamentoPaciente WHERE codPaciente=? and codTratamentoPaciente=?";
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, paciente.getCodPessoa());
+			ps.setInt(2, tratamento.getCodTratamentoPaciente());
+			ps.executeUpdate();
+			ps.close();
 
+		} catch (Exception e) {e.printStackTrace();}
 	}
 }

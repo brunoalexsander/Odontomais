@@ -81,6 +81,7 @@ public class Usuario {
 						usuario.getNivelAcessoUsusario() 
 				});	
 			}
+			model.removeRow(0);
 		} catch (Exception e) {}
 	}
 

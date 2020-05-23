@@ -5,6 +5,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 
+import javax.swing.JOptionPane;
+
+import com.sun.prism.paint.Stop;
+
 import br.com.odontomais.model.Paciente;
 import br.com.odontomais.util.ConnectionFactory;
 
@@ -26,13 +30,14 @@ public class PacienteDAO extends PessoaDAO{
 
 		try {
 
-			String sql = "INSERT INTO paciente (nomeConvenio, valCartaoConvenio, titularConvenio, codpessoa) VALUES (?, ?, ?, ?)";
+			String sql = "INSERT INTO paciente (nomeConvenio, valCartaoConvenio, titularConvenio, codpessoa, ncartao) VALUES (?, ?, ?, ?, ?)";
 
 			ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 			ps.setString(1, paciente.getNomeConvenio());
 			ps.setString(2, paciente.getValidadeCartaoConvenio());
 			ps.setString(3, paciente.getTitularConvenio());
 			ps.setInt(4, paciente.getCodPessoa());
+			ps.setString(5, paciente.getCartaoConvenio());
 			ps.executeUpdate();
 
 			rs = ps.getGeneratedKeys();  
@@ -41,9 +46,7 @@ public class PacienteDAO extends PessoaDAO{
 
 			ps.close();
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		} catch (Exception e) {}
 	}
 
 	public void consultarPaciente(Paciente paciente) {
@@ -57,27 +60,39 @@ public class PacienteDAO extends PessoaDAO{
 				paciente.setNomeConvenio(rs.getString("nomeconvenio"));
 				paciente.setValidadeCartaoConvenio(rs.getString("valCartaoConvenio"));
 				paciente.setTitularConvenio(rs.getString("titularConvenio"));
+				paciente.setCartaoConvenio(rs.getString("ncartao"));
+			} else {
+				JOptionPane.showMessageDialog(null, "Paciente não encontrado");
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		} catch (Exception e) {}
 	}
 
 	public void alterarPaciente(Paciente paciente) {
-		
+
 		try {
-			String sql = "UPDATE paciente SET nomeConvenio=?, valCartaoConvenio=?, titularConvenio=? WHERE codpessoa=?";
+			String sql = "UPDATE paciente SET nomeConvenio=?, valCartaoConvenio=?, titularConvenio=?, ncartao=? WHERE codpessoa=?";
 
 			ps = conn.prepareStatement(sql);
 			ps.setString(1, paciente.getNomeConvenio());
 			ps.setString(2, paciente.getValidadeCartaoConvenio());
 			ps.setString(3, paciente.getTitularConvenio());
-			ps.setInt(4, paciente.getCodPessoa());
+			ps.setString(4, paciente.getCartaoConvenio());
+			ps.setInt(5, paciente.getCodPessoa());
 			ps.executeUpdate();
 			ps.close();
 
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		} catch (Exception e) {}
+	}
+
+	public void excluirPaciente(Paciente paciente) {
+
+		try {
+			String sql = "DELETE FROM pessoa WHERE codPessoa=?";
+			ps = conn.prepareStatement(sql);
+			ps.setInt(1, paciente.getCodPessoa());
+			ps.executeUpdate();
+			ps.close();
+
+		} catch (Exception e) {}
 	}
 }

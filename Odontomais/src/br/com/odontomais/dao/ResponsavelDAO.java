@@ -45,7 +45,7 @@ public class ResponsavelDAO {
 	public Pessoa consultarResponsavel(Responsavel responsavel) {
 			
 		try {
-			ps = conn.prepareStatement("SELECT codPessoa FROM responsavelpaciente WHERE codPaciente=?");
+			ps = conn.prepareStatement("SELECT * FROM responsavelpaciente WHERE codPaciente=?");
 			ps.setInt(1, responsavel.getCodPaciente());
 			rs = ps.executeQuery(); 
 			if(rs.next()) {
@@ -54,8 +54,8 @@ public class ResponsavelDAO {
 		} catch (Exception e) {
 			// TODO: handle exception
 		}
-		
-		return pessoa;
+
+		return responsavel;
 	}
 
 }

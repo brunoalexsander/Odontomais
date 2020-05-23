@@ -127,7 +127,7 @@ public class UsuarioDAO {
 			ps.setInt(5, usuario.getCodUsuario());
 			ps.executeUpdate();
 			ps.close();
-
+			System.out.println(usuario.getNomeUsuario());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -98,8 +98,6 @@ public class PessoaDAO extends EnderecoDAO{
 			ps.setInt(9, pessoa.getCodPessoa());
 			ps.executeUpdate();
 			ps.close();
-			
-			System.out.println(pessoa.getCodPessoa());
 
 		} catch (Exception e) {
 			e.printStackTrace();

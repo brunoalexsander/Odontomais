@@ -11,6 +11,7 @@ import com.sun.webkit.ContextMenu.ShowContext;
 
 import br.com.odontomais.dao.ProntuarioDAO;
 import br.com.odontomais.dao.TratamentoPacienteDAO;
+import br.com.odontomais.view.frmPaciente;
 
 public class Prontuario {
 
@@ -62,13 +63,18 @@ public class Prontuario {
 		this.codPaciente = codPaciente;
 	}
 
-	public void salvarAnotacaoProntuario(Prontuario prontuario) {
+	public void salvarAnotacaoProntuario(Prontuario prontuario, JTable tabelaAnotacoes) {
 
 		try {
 			DAOProntuario = new ProntuarioDAO();
 			DAOProntuario.salvarAnotacaoProntuario(prontuario);
 
 			JOptionPane.showMessageDialog(null, "Anotação Salva com Sucesso");
+			
+			DefaultTableModel model = (DefaultTableModel) tabelaAnotacoes.getModel();
+			model.setRowCount(0);
+			buscarProntuarioPaciente(frmPaciente.paciente, tabelaAnotacoes);
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -114,7 +120,7 @@ public class Prontuario {
 		return prontuario;
 	}
 
-	public void alterarAnotacao(Prontuario prontuario) {
+	public void alterarAnotacao(Prontuario prontuario, JTable tabelaAnotacoes) {
 
 		try {
 			
@@ -122,6 +128,10 @@ public class Prontuario {
 			DAOProntuario.alterarAnotacao(prontuario);
 			
 			JOptionPane.showMessageDialog(null, "Alterado com Sucesso");
+			
+			DefaultTableModel model = (DefaultTableModel) tabelaAnotacoes.getModel();
+			model.setRowCount(0);
+			buscarProntuarioPaciente(frmPaciente.paciente, tabelaAnotacoes);
 
 		} catch (Exception e) {}
 	}

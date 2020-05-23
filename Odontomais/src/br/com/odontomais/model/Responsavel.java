@@ -46,7 +46,7 @@ public class Responsavel extends Pessoa{
 			consultarPessoa(responsavel);
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+			e.printStackTrace();
 		}
 		
 	}

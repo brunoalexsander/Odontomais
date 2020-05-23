@@ -89,7 +89,7 @@ public class ProntuarioDAO {
 				prontuario.setAnotacao(rs.getString("anotacao"));
 			}
 		}
-		catch (Exception e) {e.printStackTrace();}
+		catch (Exception e) {}
 		
 		return prontuario;
 	}

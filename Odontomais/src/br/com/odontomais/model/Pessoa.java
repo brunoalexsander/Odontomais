@@ -84,30 +84,29 @@ public class Pessoa extends Endereco{
 	}
 
 	public String getDataNascimento() {
-		return this.dataNascimento;
+		return this.dataNascimento.replaceAll("[\\D]", "");
 	}
 
 	public void setDataNascimento(String dataNascimento) {			
-		this.dataNascimento = dataNascimento.replaceAll("[\\D]", "");
+		this.dataNascimento = dataNascimento;
 	}
 
 	public String getGenero() {
 		return this.genero;
 	}
 
-	public int getGenero(JComboBox<?> ComboGenero) {
+	public int getGenero(JComboBox ComboGenero) {
 		int index = 0;
 
-		if(this.genero == "M") {
-			index = 0;
-		} else {
+		if(this.genero.equals("M")) {
 			index = 1;
+		} else {
+			index = 2;
 		}
 
 		ComboGenero.setSelectedIndex(index);
 
 		return index; 
-
 	}
 
 	public void setGenero(String genero) {
